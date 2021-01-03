@@ -1,3 +1,4 @@
+package Obj;
 
 public class Character extends Object {
 	int HP;
@@ -7,8 +8,13 @@ public class Character extends Object {
 	int walkCountMax;	//1~6
 	char team;
 
-	Character(String ID, String name, char team) {
+	public Character(String ID, String name, char team) {
 		super(ID, name + "(" + team + ")");
+	}
+
+	//空欄のますにはこれを使用して埋める
+	public Character() {
+		super("c0", "");
 	}
 
 	public void setHP(int HP) {

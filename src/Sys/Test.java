@@ -22,6 +22,8 @@ public class Test {
 		
 		
 		map.setObj(1,2, c1);
+		map.removeObj(1, 2, 'i');
+		map.removeObj(1, 2, 'i');
 		map.printMap();
 	}
 }

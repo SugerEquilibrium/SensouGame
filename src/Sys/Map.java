@@ -74,6 +74,18 @@ public class Map {
 			this.tl[x][y] = (Trap)o;
 		}
 	}
+	
+	public void removeObj(int x, int y, char target) {
+		if(target == 'c') {
+			this.cl[x][y] = new Character();
+		}else if(target == 'i') {
+			this.il[x][y][countStackedItem(x, y)-1] = new Item();
+		}else if(target == 't') {
+			this.tl[x][y] = new Trap();
+		}else {
+			System.out.println("削除対象は'c','i','t'のいずれかで指定してください");
+		}
+	}
 
 	public void printCharacterLayer() {
 		//列の横幅の最大を決定
@@ -157,11 +169,11 @@ public class Map {
 
 		//マップ本体描画
 		for(int y = 0; y < Ysize; y++) {
-			for(int stack = 0; stack < heightMax[y]; stack++) {				
+			for(int stack = heightMax[y]; stack > 0; stack--) {				
 				for(int x = 0; x < Xsize; x++) {					
 					System.out.print(" | ");
-					System.out.print(this.il[x][y][stack].getName());
-					for(int i = 0; i < widthMax[x] - this.il[x][y][stack].getName().length(); i++) {
+					System.out.print(this.il[x][y][stack -1].getName());
+					for(int i = 0; i < widthMax[x] - this.il[x][y][stack -1].getName().length(); i++) {
 						System.out.print(" ");
 					}	
 				}
@@ -234,11 +246,11 @@ public class Map {
 			}
 			System.out.println("    |");
 			//アイテムレイヤー描画
-			for(int stack = 0; stack < heightMax[y]; stack++) {
+			for(int stack = heightMax[y]; stack > 0; stack--) {
 				for(int x = 0; x < Xsize; x++) {
 					System.out.print("    |    ");
-					System.out.print(this.il[x][y][stack].getName());
-					for(int i = 0; i < widthMax[x] - this.il[x][y][stack].getName().length(); i++) {
+					System.out.print(this.il[x][y][stack -1].getName());
+					for(int i = 0; i < widthMax[x] - this.il[x][y][stack -1].getName().length(); i++) {
 						System.out.print(" ");
 					}	
 				}

@@ -1,6 +1,6 @@
 package Obj;
 
-public abstract class Object {
+public class Object {
 	String ID;	//IDは変数名と同じにすること
 	String name;
 

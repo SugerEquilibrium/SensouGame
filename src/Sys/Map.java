@@ -8,7 +8,7 @@ public class Map {
 	private int Xsize;
 	private int Ysize;
 	private Character cl[][];		//キャラクターレイヤー
-	private Item il[][][];			//アイテムレイヤー
+	private Item il[][][];			//アイテムレイヤー (最大100アイテムまで保管可能)
 	private Trap tl[][];			//トラップレイヤー
 
 	public Character[][] getCharacterLayer(){
@@ -67,7 +67,7 @@ public class Map {
 	//同じ座標に重なっているアイテムから引数のIDのアイテムを検索し、そのスタック番号をひとつだけ返します。
 	//同じIDが２つ以上あった場合、スタック番号の大きい法の値を返します
 	public int findItemById(int x, int y, String ID) {
-		int stack = 0;
+		int stack = 99;
 		for(int count = 0; count < countStackedItem(x, y); count++) {
 			if(il[x][y][count].getID().equals(ID)) {
 				stack = count;

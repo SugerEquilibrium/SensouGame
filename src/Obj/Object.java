@@ -1,6 +1,6 @@
 package Obj;
 
-public class Object {
+public abstract class Object {
 	String ID;	//IDは変数名と同じにすること
 	String name;
 
@@ -16,4 +16,6 @@ public class Object {
 	public String getID() {
 		return this.ID;
 	}
+	
+//	public abstract boolean isNext(Map m, Object o);
 }

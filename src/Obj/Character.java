@@ -1,5 +1,7 @@
 package Obj;
 
+import Sys.Map;
+
 public class Character extends Object {
 	int HP;
 	private int HPMAX = 5;
@@ -57,6 +59,27 @@ public class Character extends Object {
 	public int getTeam() {
 		return this.team;
 	}
-
+	
+	public void move(Map m, int direction) {
+		int x = m.getPosition(this.ID)[0];
+		int y = m.getPosition(this.ID)[1];
+		int X = x;
+		int Y = y;
+		switch(direction) {
+		case 0:
+			Y -= 1;
+			break;
+		case 2:
+			X += 1;
+			break;
+		case 4:
+			Y += 1;
+			break;
+		case 6:
+			X -= 1;
+			break;
+		}
+		m.moveCharacter(x, y, X, Y);
+	}
 
 }

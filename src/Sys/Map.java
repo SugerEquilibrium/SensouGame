@@ -52,6 +52,19 @@ public class Map {
 		}
 	}
 
+	public int[] getPosition(String ID) {
+		int position[] = new int[2];
+		for(int x = 0; x < Xsize; x++) {
+			for(int y = 0; y < Ysize; y++) {
+				if(cl[x][y].getID().equals(ID)) {
+					position[0] = x;
+					position[1] = y;
+				}
+			}
+		}
+		return position;		//見つからなかった場合はnull配列を返す（要修正
+	}
+
 	//同じ座標に重なっているアイテムの個数を整数で返します
 	public int countStackedItem(int x, int y) {
 		int last = 0;
@@ -96,9 +109,9 @@ public class Map {
 		this.cl[x][y] = new Character();
 	}
 
-	//指定した座標に重なっているアイテムから引数のスタック番号のアイテムを削除
-	public void removeItem(int x, int y, int count) {
-		for(int c = count; c < countStackedItem(x, y); c++) {
+	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し、削除、上詰め
+	public void removeItem(int x, int y, String ID) {
+		for(int c = findItemById(x, y, ID); c < countStackedItem(x, y); c++) {
 			this.il[x][y][c] = this.il[x][y][c + 1];
 		}
 	}
@@ -114,17 +127,44 @@ public class Map {
 		removeCharacter(x, y);
 	}
 
-	//指定した座標に重なっているアイテムから引数のスタック番号のアイテムを移動させる
+	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
-	public void moveItem(int x, int y, int count, int X, int Y) {
-		setItem(X, Y, this.il[x][y][count]);
-		removeItem(x, y, count);
+	public void moveItem(int x, int y, String ID, int X, int Y) {
+		setItem(X, Y, this.il[x][y][findItemById(x, y, ID)]);
+		removeItem(x, y, ID);
 	}
 
 	//座標(x -> X, y -> Y)にトラップを移動
 	public void moveTrap(int x, int y, int X, int Y) {
 		setTrap(X, Y, this.tl[x][y]);
 		removeTrap(x, y);
+	}
+
+	//引数の座標にオブジェクトが入れるかどうかをboolean型で返します
+	public boolean isEnter(int x, int y, char c) {
+		boolean collision = true;
+		if(x > this.Xsize - 1 || y > this.Ysize) {
+			collision = false;
+			return collision;
+		}
+		switch (c){
+		case 'c':
+			if(!cl[x][y].getName().equals("")) {
+				collision = false;
+			}
+			break;
+		case 'i':
+			if(!cl[x][y].getName().equals("")) {
+				collision = false;
+			}
+			break;
+		case 't':
+			if(!tl[x][y].getName().equals("")) {
+				collision = false;
+			}
+			break;
+		}
+		return collision;
 	}
 
 	public void printCharacterLayer() {

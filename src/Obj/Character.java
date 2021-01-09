@@ -10,12 +10,15 @@ public class Character extends Object {
 	private int walkCount;
 	private int walkCountMax;	//1~6
 	private char team;
+	private boolean isDead;
 
 	public Character(String ID, String name, char team) {
 		super(ID, name + "(" + team + ")");
-		item = new Item[3];
-		for(int i = 0; i < item.length; i++) {
-			item[i] = new Item();
+		this.HP = this.HPMAX;
+		this.isDead = false;
+		this.item = new Item[3];
+		for(int i = 0; i < this.item.length; i++) {
+			this.item[i] = new Item();
 		}
 	}
 
@@ -70,16 +73,16 @@ public class Character extends Object {
 		int X = x;
 		int Y = y;
 		switch(direction) {
-		case 0:
+		case 1:
 			Y -= 1;
 			break;
-		case 2:
+		case 4:
 			X += 1;
 			break;
-		case 4:
+		case 6:
 			Y += 1;
 			break;
-		case 6:
+		case 3:
 			X -= 1;
 			break;
 		}
@@ -108,4 +111,35 @@ public class Character extends Object {
 		}
 	}
 
+	//8方向に隣接するキャラクターを長さ8のキャラクター型配列に格納します
+	public Character[] getNextCharcter(Map m) {
+		Character[] nextCharacter = new Character[8];
+		int counter = 0;
+		int x = m.getPosition(this.ID)[0];
+		int y = m.getPosition(this.ID)[1];
+		for(int Y = -1; Y < 2; Y++) {
+			for(int X = -1; X < 2; X++) {
+				if(X != 0 || Y != 0) {
+					if((x + X) < m.getXsize() && (y + Y)< m.getYsize()) {
+						nextCharacter[counter] = m.getCharacterLayer()[x + X][y + Y];
+					}else {
+						nextCharacter[counter] = new Character();
+					}
+					counter++;
+				}
+			}
+		}
+		return nextCharacter;
+	}
+
+	public void damage() {
+		this.HP -= 1;
+		if(this.HP == 0) {
+			this.isDead = true;
+		}
+	}
+
+	public void attack(Map m, int direction) {
+		getNextCharcter(m)[direction].damage();
+	}
 }

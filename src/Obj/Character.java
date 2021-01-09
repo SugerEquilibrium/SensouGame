@@ -10,6 +10,7 @@ public class Character extends Object {
 
 	public Character(String ID, String name, char team) {
 		super(ID, name + "(" + team + ")");
+		item = new Item[3];
 	}
 
 	//空欄のますにはこれを使用して埋める

@@ -45,13 +45,14 @@ public class Map {
 			for(int y1 = 0; y1 < Ysize; y1++) {
 				cl[x1][y1] = ce;
 				tl[x1][y1] = te;
-				for(int stack = 0; stack < 100; stack++) {
+				for(int stack = 0; stack < il[x1][y1].length; stack++) {
 					il[x1][y1][stack] = ie;
 				}
 			}
 		}
 	}
 
+	//引数のIDに一致するキャラクターの座標を取得
 	public int[] getPosition(String ID) {
 		int position[] = new int[2];
 		for(int x = 0; x < Xsize; x++) {
@@ -65,30 +66,6 @@ public class Map {
 		return position;		//見つからなかった場合はnull配列を返す（要修正
 	}
 
-	//同じ座標に重なっているアイテムの個数を整数で返します
-	public int countStackedItem(int x, int y) {
-		int last = 0;
-		for(int i = 0; i < 100; i++) {
-			if(this.il[x][y][i].getID().equals("i0")) {
-				last = i;
-				break;
-			}
-		}
-		return last;
-	}
-
-	//同じ座標に重なっているアイテムから引数のIDのアイテムを検索し、そのスタック番号をひとつだけ返します。
-	//同じIDが２つ以上あった場合、スタック番号の大きい法の値を返します
-	public int findItemById(int x, int y, String ID) {
-		int stack = 99;
-		for(int count = 0; count < countStackedItem(x, y); count++) {
-			if(il[x][y][count].getID().equals(ID)) {
-				stack = count;
-			}
-		}
-		return stack;
-	}
-
 	//引数の座標にキャラクターをセット
 	public void setCharacter(int x, int y, Character c) {
 		this.cl[x][y] = c;
@@ -96,7 +73,7 @@ public class Map {
 
 	//アイテムを一番上にセット
 	public void setItem(int x, int y, Item i) {
-		this.il[x][y][countStackedItem(x, y)] = i;
+		this.il[x][y][ItemStackCtrl.countItem(this.il[x][y])] = i;
 	}
 
 	//引数の座標にトラップをセット
@@ -111,9 +88,7 @@ public class Map {
 
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し、削除、上詰め
 	public void removeItem(int x, int y, String ID) {
-		for(int c = findItemById(x, y, ID); c < countStackedItem(x, y); c++) {
-			this.il[x][y][c] = this.il[x][y][c + 1];
-		}
+		ItemStackCtrl.removeItemById(this.il[x][y], ID);
 	}
 
 	//引数の座標のトラップを削除
@@ -130,7 +105,7 @@ public class Map {
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
 	public void moveItem(int x, int y, String ID, int X, int Y) {
-		setItem(X, Y, this.il[x][y][findItemById(x, y, ID)]);
+		setItem(X, Y, ItemStackCtrl.findItemById(this.il[x][y], ID));
 		removeItem(x, y, ID);
 	}
 
@@ -218,7 +193,7 @@ public class Map {
 		for(int x = 0; x < Xsize; x++) {
 			widthMax[x] = 0;
 			for(int y = 0; y < Ysize; y++) {
-				for(int stack = 0; stack < countStackedItem(x, y) + 1; stack++) {
+				for(int stack = 0; stack < ItemStackCtrl.countItem(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
 						widthMax[x] = this.il[x][y][stack].getName().length();
 					}
@@ -231,8 +206,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < countStackedItem(x, y)) {
-					heightMax[y] = countStackedItem(x, y);
+				if(heightMax[y] < ItemStackCtrl.countItem(this.il[x][y])) {
+					heightMax[y] = ItemStackCtrl.countItem(this.il[x][y]);
 				}
 			}
 		}
@@ -285,7 +260,7 @@ public class Map {
 				if(widthMax[x] < this.tl[x][y].getName().length()) {
 					widthMax[x] = this.tl[x][y].getName().length();
 				}
-				for(int stack = 0; stack < countStackedItem(x, y) + 1; stack++) {
+				for(int stack = 0; stack < ItemStackCtrl.countItem(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
 						widthMax[x] = this.il[x][y][stack].getName().length();
 					}
@@ -298,8 +273,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < countStackedItem(x, y)) {
-					heightMax[y] = countStackedItem(x, y);
+				if(heightMax[y] < ItemStackCtrl.countItem(this.il[x][y])) {
+					heightMax[y] = ItemStackCtrl.countItem(this.il[x][y]);
 				}
 			}
 		}

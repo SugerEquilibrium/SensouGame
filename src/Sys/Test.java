@@ -23,18 +23,34 @@ public class Test {
 
 
 //		map.removeItem(1, 2, map.findItemById(1, 2, "i1"));
-		map.moveItem(1, 2, "i1", 2, 2);
+//		map.moveItem(1, 2, "i1", 2, 2);
 		map.moveCharacter(1, 2, 4, 2);
 		map.moveTrap(1, 2, 3, 0);
-		
+
+//		map.listStackedItem(1, 2);
+
 //		System.out.println(map.collision(12, 12, 'c'));
+
+		c1.move(map, 6);
+		c1.move(map, 6);
+		c1.move(map, 6);
 		
-		c1.move(map, 0);
-		
+//		ItemStackCtrl.listItem(map.getItemLayer()[1][2]);
+//		System.out.println();
+
+		c1.takeItem(map, "i1", "i3", "i2");
+
 		System.out.println("c1の座標 : (" + map.getPosition("c1")[0] + ", " + map.getPosition("c1")[1] + ")");
-		
+
+//		ItemStackControl.removeItemById(map.getItemLayer()[1][2], "i1");
+
 //		map.printCharacterLayer();
 //		map.printItemLayer();
 		map.printMap();
+
+		System.out.println(ItemStackCtrl.countItem(c1.getItem()));
+		ItemStackCtrl.listItem(c1.getItem());
+		
+		
 	}
 }

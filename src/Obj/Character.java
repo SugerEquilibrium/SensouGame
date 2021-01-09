@@ -1,18 +1,22 @@
 package Obj;
 
+import Sys.ItemStackCtrl;
 import Sys.Map;
 
 public class Character extends Object {
-	int HP;
+	private int HP;
 	private int HPMAX = 5;
-	Item item[];
-	int walkCount;
-	int walkCountMax;	//1~6
-	char team;
+	private Item item[];
+	private int walkCount;
+	private int walkCountMax;	//1~6
+	private char team;
 
 	public Character(String ID, String name, char team) {
 		super(ID, name + "(" + team + ")");
 		item = new Item[3];
+		for(int i = 0; i < item.length; i++) {
+			item[i] = new Item();
+		}
 	}
 
 	//空欄のますにはこれを使用して埋める
@@ -59,7 +63,7 @@ public class Character extends Object {
 	public int getTeam() {
 		return this.team;
 	}
-	
+
 	public void move(Map m, int direction) {
 		int x = m.getPosition(this.ID)[0];
 		int y = m.getPosition(this.ID)[1];
@@ -80,6 +84,28 @@ public class Character extends Object {
 			break;
 		}
 		m.moveCharacter(x, y, X, Y);
+	}
+
+	//同じ座標のアイテム取得
+	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
+	//指定したIDがキャラクターと同じ座標にない場合は無を取得
+	public void takeItem(Map m, String ID1, String ID2, String ID3) {
+		int x = m.getPosition(this.ID)[0];
+		int y = m.getPosition(this.ID)[1];
+		//所有アイテム配列の最後に指定したIDのアイテムを配置
+		//所有アイテムがいっぱいの時、又は、指定したIDが存在しない時は無視
+		if(ItemStackCtrl.countItem(this.item) < 3) {
+			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID1);
+			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
+		}
+		if(ItemStackCtrl.countItem(this.item) < 3) {
+			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID2);
+			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID2);
+		}
+		if(ItemStackCtrl.countItem(this.item) < 3) {
+			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID3);//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
+			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID3);
+		}
 	}
 
 }

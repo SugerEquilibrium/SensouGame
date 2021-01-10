@@ -1,8 +1,9 @@
 package Sys;
 
-import Obj.Character;
-import Obj.Item;
-import Obj.Trap;
+import Character.Character;
+import Item.Item;
+import Land.Land;
+import Trap.Trap;
 
 public class Map {
 	private int Xsize;
@@ -10,6 +11,7 @@ public class Map {
 	private Character cl[][];		//キャラクターレイヤー
 	private Item il[][][];			//アイテムレイヤー (最大100アイテムまで保管可能)
 	private Trap tl[][];			//トラップレイヤー
+	private Land ll[][];			//地形レイヤー
 
 	public Character[][] getCharacterLayer(){
 		return this.cl;
@@ -37,14 +39,16 @@ public class Map {
 		this.cl = new Character[x][y];
 		this.il = new Item[x][y][100];
 		this.tl = new Trap[x][y];
+		this.ll = new Land[x][y];
 		Character ce = new Character();
 		Item ie = new Item();
 		Trap te = new Trap();
-
+		Land le = new Land();
 		for(int x1 = 0; x1 < Xsize; x1++) {
 			for(int y1 = 0; y1 < Ysize; y1++) {
 				cl[x1][y1] = ce;
 				tl[x1][y1] = te;
+				ll[x1][y1] = le;
 				for(int stack = 0; stack < il[x1][y1].length; stack++) {
 					il[x1][y1][stack] = ie;
 				}
@@ -73,12 +77,17 @@ public class Map {
 
 	//アイテムを一番上にセット
 	public void setItem(int x, int y, Item i) {
-		this.il[x][y][ItemStackCtrl.countItem(this.il[x][y])] = i;
+		this.il[x][y][Util.countItemArr(this.il[x][y])] = i;
 	}
 
 	//引数の座標にトラップをセット
 	public void setTrap(int x, int y, Trap t) {
 		this.tl[x][y] = t;
+	}
+
+	//引数の座標に地形オブジェクトをセット
+	public void setLand(int x, int y, Land l) {
+		this.ll[x][y] = l;
 	}
 
 	//引数の座標のキャラクターを消去
@@ -88,12 +97,17 @@ public class Map {
 
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し、削除、上詰め
 	public void removeItem(int x, int y, String ID) {
-		ItemStackCtrl.removeItemById(this.il[x][y], ID);
+		Util.removeItemById(this.il[x][y], ID);
 	}
 
 	//引数の座標のトラップを削除
 	public void removeTrap(int x, int y) {
 		this.tl[x][y] = new Trap();
+	}
+
+	//引数の座標の地形オブジェクトを削除
+	public void removeLand(int x, int y) {
+		this.ll[x][y] = new Land();
 	}
 
 	//座標(x -> X, y -> Y)にキャラクターを移動
@@ -105,7 +119,7 @@ public class Map {
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
 	public void moveItem(int x, int y, String ID, int X, int Y) {
-		setItem(X, Y, ItemStackCtrl.findItemById(this.il[x][y], ID));
+		setItem(X, Y, Util.findItemById(this.il[x][y], ID));
 		removeItem(x, y, ID);
 	}
 
@@ -114,7 +128,7 @@ public class Map {
 		setTrap(X, Y, this.tl[x][y]);
 		removeTrap(x, y);
 	}
-	
+
 	//引数の座標が盤面の範囲外かどうかをboolean型で返します
 	public boolean outSideError(int x, int y) {
 		boolean out = false;
@@ -202,7 +216,7 @@ public class Map {
 		for(int x = 0; x < Xsize; x++) {
 			widthMax[x] = 0;
 			for(int y = 0; y < Ysize; y++) {
-				for(int stack = 0; stack < ItemStackCtrl.countItem(this.il[x][y]) + 1; stack++) {
+				for(int stack = 0; stack < Util.countItemArr(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
 						widthMax[x] = this.il[x][y][stack].getName().length();
 					}
@@ -215,8 +229,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < ItemStackCtrl.countItem(this.il[x][y])) {
-					heightMax[y] = ItemStackCtrl.countItem(this.il[x][y]);
+				if(heightMax[y] < Util.countItemArr(this.il[x][y])) {
+					heightMax[y] = Util.countItemArr(this.il[x][y]);
 				}
 			}
 		}
@@ -269,7 +283,10 @@ public class Map {
 				if(widthMax[x] < this.tl[x][y].getName().length()) {
 					widthMax[x] = this.tl[x][y].getName().length();
 				}
-				for(int stack = 0; stack < ItemStackCtrl.countItem(this.il[x][y]) + 1; stack++) {
+				if(widthMax[x] < this.ll[x][y].getName().length()) {
+					widthMax[x] = this.ll[x][y].getName().length();
+				}
+				for(int stack = 0; stack < Util.countItemArr(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
 						widthMax[x] = this.il[x][y][stack].getName().length();
 					}
@@ -282,8 +299,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < ItemStackCtrl.countItem(this.il[x][y])) {
-					heightMax[y] = ItemStackCtrl.countItem(this.il[x][y]);
+				if(heightMax[y] < Util.countItemArr(this.il[x][y])) {
+					heightMax[y] = Util.countItemArr(this.il[x][y]);
 				}
 			}
 		}
@@ -325,6 +342,15 @@ public class Map {
 				System.out.print("    |    ");
 				System.out.print(this.tl[x][y].getName());
 				for(int i = 0; i < widthMax[x] - this.tl[x][y].getName().length(); i++) {
+					System.out.print(" ");
+				}
+			}
+			System.out.println("    |");
+			//地形レイヤー描画
+			for(int x = 0; x < Xsize; x++) {
+				System.out.print("    |    ");
+				System.out.print(this.ll[x][y].getName());
+				for(int i = 0; i < widthMax[x] - this.ll[x][y].getName().length(); i++) {
 					System.out.print(" ");
 				}
 			}

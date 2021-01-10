@@ -1,7 +1,10 @@
 package Sys;
 
+import Character.Character;
+import Item.Item;
+
 public class Util {
-	
+
 	//方向番号を受け取り、それに対応する相対的な座標系のベクトルの配列を返します
 	//方向番号は時計回りに0時方向から0で始まり7で終わる
 	public static int[] directionVector(int direction) {
@@ -37,5 +40,80 @@ public class Util {
 			break;
 		}
 		return v;
+	}
+
+	//渡されたキャラクター型配列を列挙します
+	public static void listCharacterArray(Character[] c) {
+		for(int i = 0; i < c.length; i++) {
+			System.out.println(i + " : " + c[i].getName());
+		}
+	}
+
+	//アイテムスタック配列に入っているアイテムの個数を整数で返します
+	public static int countItemArr(Item[] item) {
+		int last = 0;
+		if(item.length == 1) {
+			if(!item[0].getID().equals("i0")) {
+				last = 1;
+			}
+		}else {
+			for(int i = 0; i < item.length; i++) {
+				if(item[i].getID().equals("i0")) {
+					last = i;
+					break;
+				}
+				if(i == item.length -1) {
+					last = item.length;
+				}
+			}
+		}
+		return last;
+	}
+
+	//アイテムスタック配列を読み込み、引数のIDを検索し、スタック番号を返します
+	//同じIDが２つ以上あった場合、スタック番号の大きい法の値を返します
+	public static int itemStackNumber(Item[] item, String ID) {
+		int stack = 99867678;
+		for(int count = 0; count < countItemArr(item); count++) {
+			if(item[count].getID().equals(ID)) {
+				stack = count;
+				break;
+			}
+		}
+		return stack;
+	}
+
+	//アイテムスタック配列を読み込み、引数のIDを検索し、アイテム型変数を返します
+	//同じIDが２つ以上あった場合、スタック番号の大きい方の値を返します
+	//見つからなかった場合は空アイテムを返します
+	public static Item findItemById(Item[] item, String ID) {
+		Item i = new Item();
+		for(int count = 0; count < countItemArr(item); count++) {
+			if(item[count].getID().equals(ID)) {
+				i = item[count];
+			}
+		}
+		return i;
+	}
+
+	//渡されたアイテム配列の内容を全て表示します
+	public static void listItemArr(Item[] item) {
+		for(int stack = 0; stack < countItemArr(item); stack++) {
+			System.out.println(stack + " : " + item[stack].getName());
+		}
+	}
+
+	//渡されたアイテム型配列の中から、指定したIDのアイテムを一つだけ削除して上詰め
+	public static void removeItemById(Item[] item, String ID) {
+		for(int c = itemStackNumber(item, ID); c < countItemArr(item); c++) {
+			item[c] = item[c + 1];
+		}
+	}
+
+	//アイテム配列の空欄を上詰め
+	public static void upShift(Item[] item) {
+		for(int i = 0; i < countItemArr(item); i++) {
+			removeItemById(item, "i0");
+		}
 	}
 }

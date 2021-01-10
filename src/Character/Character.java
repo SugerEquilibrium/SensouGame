@@ -1,10 +1,11 @@
-package Obj;
+package Character;
 
-import Sys.ItemStackCtrl;
+import Item.Item;
 import Sys.Map;
+import Sys.Obj;
 import Sys.Util;
 
-public class Character extends Object {
+public class Character extends Obj {
 	private int HP;
 	private int HPMAX = 5;
 	private Item item[];
@@ -69,8 +70,8 @@ public class Character extends Object {
 	}
 
 	public void move(Map m, int direction) {
-		int x = m.getPosition(this.ID)[0];
-		int y = m.getPosition(this.ID)[1];
+		int x = m.getPosition(this.getID())[0];
+		int y = m.getPosition(this.getID())[1];
 		int X = x + Util.directionVector(direction)[0];
 		int Y = y + Util.directionVector(direction)[1];
 		m.moveCharacter(x, y, X, Y);
@@ -80,21 +81,21 @@ public class Character extends Object {
 	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
 	//指定したIDがキャラクターと同じ座標にない場合は無を取得
 	public void takeItem(Map m, String ID1, String ID2, String ID3) {
-		int x = m.getPosition(this.ID)[0];
-		int y = m.getPosition(this.ID)[1];
+		int x = m.getPosition(this.getID())[0];
+		int y = m.getPosition(this.getID())[1];
 		//所有アイテム配列の最後に指定したIDのアイテムを配置
 		//所有アイテムがいっぱいの時、又は、指定したIDが存在しない時は無視
-		if(ItemStackCtrl.countItem(this.item) < 3) {
-			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID1);
-			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
+		if(Util.countItemArr(this.item) < 3) {
+			this.item[Util.countItemArr(this.item)] = Util.findItemById(m.getItemLayer()[x][y], ID1);
+			Util.removeItemById(m.getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
 		}
-		if(ItemStackCtrl.countItem(this.item) < 3) {
-			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID2);
-			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID2);
+		if(Util.countItemArr(this.item) < 3) {
+			this.item[Util.countItemArr(this.item)] = Util.findItemById(m.getItemLayer()[x][y], ID2);
+			Util.removeItemById(m.getItemLayer()[x][y], ID2);
 		}
-		if(ItemStackCtrl.countItem(this.item) < 3) {
-			this.item[ItemStackCtrl.countItem(this.item)] = ItemStackCtrl.findItemById(m.getItemLayer()[x][y], ID3);//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
-			ItemStackCtrl.removeItemById(m.getItemLayer()[x][y], ID3);
+		if(Util.countItemArr(this.item) < 3) {
+			this.item[Util.countItemArr(this.item)] = Util.findItemById(m.getItemLayer()[x][y], ID3);//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
+			Util.removeItemById(m.getItemLayer()[x][y], ID3);
 		}
 	}
 
@@ -102,8 +103,8 @@ public class Character extends Object {
 	//配列外に隣接している場合は、からキャラクターを格納します
 	public Character[] getNextCharcter(Map m) {
 		Character[] nextCharacter = new Character[8];
-		int x = m.getPosition(this.ID)[0];
-		int y = m.getPosition(this.ID)[1];
+		int x = m.getPosition(this.getID())[0];
+		int y = m.getPosition(this.getID())[1];
 		int X;
 		int Y;
 		for(int i = 0; i < nextCharacter.length; i++) {

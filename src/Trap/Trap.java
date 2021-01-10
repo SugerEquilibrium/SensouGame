@@ -1,6 +1,8 @@
-package Obj;
+package Trap;
 
-public class Trap extends Object{
+import Sys.Obj;
+
+public class Trap extends Obj{
 
 	public Trap() {
 		super("i0", "");

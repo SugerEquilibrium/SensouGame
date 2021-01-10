@@ -1,10 +1,10 @@
-package Obj;
+package Sys;
 
-public abstract class Object {
+public abstract class Obj {
 	String ID;	//IDは変数名と同じにすること
 	String name;
 
-	Object(String ID, String name){
+	public Obj(String ID, String name){
 		this.ID = ID;
 		this.name = name;
 	}

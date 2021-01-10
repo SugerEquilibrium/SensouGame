@@ -1,6 +1,8 @@
-package Obj;
+package Item;
 
-public class Item extends Object{
+import Sys.Obj;
+
+public class Item extends Obj{
 	
 	public Item() {
 		super("i0", "");

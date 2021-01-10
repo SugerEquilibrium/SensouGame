@@ -1,7 +1,11 @@
 package Sys;
-import Obj.Character;
+import Character.Character;
 
 public class GameCtrl {
+	
+	public static int dice() {
+		return new java.util.Random().nextInt(6) + 1;
+	}
 	
 	public static void resetGame(Map m) {
 		
@@ -28,10 +32,11 @@ public class GameCtrl {
 			}while(m.collision(X, Y, 'c'));
 			c.move(m, direction);
 			m.printMap();
+			c.setWalkCount(c.getWalkCount() - 1);
 		}
 	}
 	
-	public static void turnCtrl() {
+	public static void turnCtrl(Character c) {
 		
 	}
 }

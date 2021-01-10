@@ -1,5 +1,5 @@
 package Trap;
 
-public class Alcohol {
+public class Alcohol extends Trap {
 
 }

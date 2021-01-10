@@ -116,4 +116,36 @@ public class Util {
 			removeItemById(item, "i0");
 		}
 	}
+
+	//フィールドから全てのオブジェクトを検索し、未使用のIDを返す
+	//ID規則 : "オブジェクトタイプ" + "キャラクター種類" + "通し番号"
+	//例 : 2番目の早足くん -> ch2
+	public static String searchNewId(Map m, String type) {
+		String ID = new String(type);
+		int i = 1;
+		boolean using;
+		do {
+			using = false;
+			ID = type + i + "";
+			for(int x = 0; x < m.getXsize(); x++) {
+				for(int y = 0; y < m.getYsize(); y++) {
+					if(m.getCharacterLayer()[x][y].getID().equals(ID.toString())) {
+						using = true;
+					}
+					else if(!findItemById(m.getItemLayer()[x][y], ID.toString()).getID().equals("i0")) {
+						using = true;
+					}
+					else if(m.getTrapLayer()[x][y].getID().equals(ID.toString())) {
+						using = true;
+					}
+					else if(m.getLandLayer()[x][y].getID().equals(ID.toString())) {
+						using = true;
+					}
+				}
+			}
+			i += 1;
+		}while(using);
+
+		return ID.toString();
+	}
 }

@@ -1,5 +1,5 @@
 package Land;
 
-public class Cliff {
+public class Cliff extends Land {
 
 }

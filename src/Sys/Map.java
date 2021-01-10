@@ -25,6 +25,10 @@ public class Map {
 		return this.tl;
 	}
 
+	public Land[][] getLandLayer(){
+		return this.ll;
+	}
+
 	public int getXsize() {
 		return this.Xsize;
 	}

@@ -1,5 +1,5 @@
 package Land;
 
-public class Wall {
+public class Wall extends Land {
 
 }

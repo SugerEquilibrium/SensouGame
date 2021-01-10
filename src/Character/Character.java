@@ -15,7 +15,7 @@ public class Character extends Obj {
 	private boolean isDead;
 
 	public Character(String ID, String name, char team) {
-		super(ID, name + "(" + team + ")");
+		super(ID, name + " (" + team + ")");
 		this.HP = this.HPMAX;
 		this.isDead = false;
 		this.item = new Item[3];
@@ -101,6 +101,7 @@ public class Character extends Obj {
 
 	//8方向に隣接するキャラクターを長さ8のキャラクター型配列に格納します
 	//配列外に隣接している場合は、からキャラクターを格納します
+	//未使用
 	public Character[] getNextCharcter(Map m) {
 		Character[] nextCharacter = new Character[8];
 		int x = m.getPosition(this.getID())[0];
@@ -112,21 +113,23 @@ public class Character extends Obj {
 			Y = y + Util.directionVector(i)[1];
 			if(m.outSideError(X, Y)) {
 				nextCharacter[i] = new Character();
-			}else {				
+			}else {
 				nextCharacter[i] = m.getCharacterLayer()[X][Y];
 			}
 		}
 		return nextCharacter;
 	}
 
-	public void damage() {
-		this.HP -= 1;
+	public void damage(int damage) {
+		this.HP -= damage;
 		if(this.HP < 0) {
 			this.isDead = true;
 		}
 	}
 
 	public void attack(Map m, int direction) {
-		getNextCharcter(m)[direction].damage();
+		int x = m.getPosition(this.getID())[0] + Util.directionVector(direction)[0];
+		int y = m.getPosition(this.getID())[1] + Util.directionVector(direction)[1];
+		m.getCharacterLayer()[x][y].damage(1);
 	}
 }

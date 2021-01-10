@@ -1,5 +1,6 @@
 package Sys;
 import Character.Character;
+import Character.Fire;
 import Item.Item;
 import Land.Land;
 import Trap.Trap;
@@ -58,6 +59,14 @@ public class Test {
 		System.out.println("c2のHP = " + c2.getHP());
 
 
+		System.out.println(Util.searchNewId(map, "c") + "\n");
+		
+		
+		Fire cf1 = new Fire(map, 'A');
+		map.setCharacter(0, 2, cf1);
+		
+//		System.out.println(map.getCharacterLayer()[1][2].getID().equals("c1"));
+		
 //		map.printCharacterLayer();
 //		map.printItemLayer();
 		map.printMap();

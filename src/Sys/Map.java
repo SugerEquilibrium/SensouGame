@@ -114,28 +114,37 @@ public class Map {
 		setTrap(X, Y, this.tl[x][y]);
 		removeTrap(x, y);
 	}
+	
+	//引数の座標が盤面の範囲外かどうかをboolean型で返します
+	public boolean outSideError(int x, int y) {
+		boolean out = false;
+		if(x >= this.Xsize || y >= this.Ysize || x < 0 || y < 0) {
+			out = true;
+		}
+		return out;
+	}
 
 	//引数の座標にオブジェクトが入れるかどうかをboolean型で返します
-	public boolean isEnter(int x, int y, char c) {
-		boolean collision = true;
-		if(x > this.Xsize - 1 || y > this.Ysize) {
-			collision = false;
+	public boolean collision(int x, int y, char c) {
+		boolean collision = false;
+		if(outSideError(x, y)) {
+			collision = true;
 			return collision;
 		}
 		switch (c){
 		case 'c':
 			if(!cl[x][y].getName().equals("")) {
-				collision = false;
+				collision = true;
 			}
 			break;
 		case 'i':
 			if(!cl[x][y].getName().equals("")) {
-				collision = false;
+				collision = true;
 			}
 			break;
 		case 't':
 			if(!tl[x][y].getName().equals("")) {
-				collision = false;
+				collision = true;
 			}
 			break;
 		}

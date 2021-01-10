@@ -54,7 +54,7 @@ public class ItemStackCtrl {
 	//アイテムスタック配列の内容を全て表示します
 	public static void listItem(Item[] item) {
 		for(int stack = 0; stack < countItem(item); stack++) {
-			System.out.println(stack + 1 + " : " + item[stack].getName());
+			System.out.println(stack + " : " + item[stack].getName());
 		}
 	}
 	

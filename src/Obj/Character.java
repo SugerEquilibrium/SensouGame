@@ -2,6 +2,7 @@ package Obj;
 
 import Sys.ItemStackCtrl;
 import Sys.Map;
+import Sys.Util;
 
 public class Character extends Object {
 	private int HP;
@@ -70,22 +71,8 @@ public class Character extends Object {
 	public void move(Map m, int direction) {
 		int x = m.getPosition(this.ID)[0];
 		int y = m.getPosition(this.ID)[1];
-		int X = x;
-		int Y = y;
-		switch(direction) {
-		case 1:
-			Y -= 1;
-			break;
-		case 4:
-			X += 1;
-			break;
-		case 6:
-			Y += 1;
-			break;
-		case 3:
-			X -= 1;
-			break;
-		}
+		int X = x + Util.directionVector(direction)[0];
+		int Y = y + Util.directionVector(direction)[1];
 		m.moveCharacter(x, y, X, Y);
 	}
 
@@ -112,21 +99,20 @@ public class Character extends Object {
 	}
 
 	//8方向に隣接するキャラクターを長さ8のキャラクター型配列に格納します
+	//配列外に隣接している場合は、からキャラクターを格納します
 	public Character[] getNextCharcter(Map m) {
 		Character[] nextCharacter = new Character[8];
-		int counter = 0;
 		int x = m.getPosition(this.ID)[0];
 		int y = m.getPosition(this.ID)[1];
-		for(int Y = -1; Y < 2; Y++) {
-			for(int X = -1; X < 2; X++) {
-				if(X != 0 || Y != 0) {
-					if((x + X) < m.getXsize() && (y + Y)< m.getYsize()) {
-						nextCharacter[counter] = m.getCharacterLayer()[x + X][y + Y];
-					}else {
-						nextCharacter[counter] = new Character();
-					}
-					counter++;
-				}
+		int X;
+		int Y;
+		for(int i = 0; i < nextCharacter.length; i++) {
+			X = x + Util.directionVector(i)[0];
+			Y = y + Util.directionVector(i)[1];
+			if(m.outSideError(X, Y)) {
+				nextCharacter[i] = new Character();
+			}else {				
+				nextCharacter[i] = m.getCharacterLayer()[X][Y];
 			}
 		}
 		return nextCharacter;
@@ -134,7 +120,7 @@ public class Character extends Object {
 
 	public void damage() {
 		this.HP -= 1;
-		if(this.HP == 0) {
+		if(this.HP < 0) {
 			this.isDead = true;
 		}
 	}

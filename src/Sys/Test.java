@@ -32,9 +32,9 @@ public class Test {
 
 //		System.out.println(map.collision(12, 12, 'c'));
 
-		c1.move(map, 3);
-		c1.move(map, 3);
-		c1.move(map, 3);
+		c1.move(map, 6);
+		c1.move(map, 6);
+		c1.move(map, 6);
 
 //		ItemStackCtrl.listItem(map.getItemLayer()[1][2]);
 //		System.out.println();
@@ -50,16 +50,18 @@ public class Test {
 
 		System.out.println("\n" + c1.getID() + "に隣接するキャラクター");
 		CharacterArrayCtrl.listCharacter(c1.getNextCharcter(map));
+
+		c1.attack(map, 7);
+		System.out.println("c1のHP = " + c1.getHP());
+		System.out.println("c2のHP = " + c2.getHP());
 		
-		c1.attack(map, 0);
-		System.out.println("c1のHP" + c1.getHP());
-		System.out.println("c2のHP" + c2.getHP());
 
 //		map.printCharacterLayer();
 //		map.printItemLayer();
 		map.printMap();
 
+		GameCtrl.walk(map, c1, 100);
 
-
+//		System.out.println(map.collision(3, 0, 'c'));
 	}
 }

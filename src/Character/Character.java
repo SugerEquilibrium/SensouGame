@@ -38,8 +38,9 @@ public class Character extends Obj {
 		return this.HP;
 	}
 
-	public void setItem(Item i[]) {
-		this.item = i;
+	//所有アイテム配列の最後に引数のアイテムを配置
+	public void setItem(Item i) {
+		this.item[Util.countItemArr(this.item)] = i;
 	}
 
 	public Item[] getItem() {
@@ -81,6 +82,31 @@ public class Character extends Obj {
 		int Y = y + Util.directionVector(direction)[1];
 		this.getM().moveCharacter(x, y, X, Y);
 	}
+	
+	//引数のキャラクターをwalk回ユーザの方向を読み取り移動させます
+	public void walk(int walk) {
+		int x;
+		int y;
+		int X;
+		int Y;
+		int direction;
+		for(int i = 0; i < walk; i++) {
+			do {
+				System.out.println("歩く方向を指定してください");
+				x = this.getM().getPosition(this.getID())[0];
+				y = this.getM().getPosition(this.getID())[1];
+				direction = new java.util.Scanner(System.in).nextInt();
+				X = x + Util.directionVector(direction)[0];
+				Y = y + Util.directionVector(direction)[1];
+				if(this.getM().collision(X, Y, 'c')) {
+					System.out.println("その方向には進めません");
+				}
+			}while(this.getM().collision(X, Y, 'c'));
+			this.move(direction);
+			this.getM().printMap();
+			this.setWalkCount(this.getWalkCount() - 1);
+		}
+	}
 
 	//同じ座標のアイテム取得
 	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
@@ -91,15 +117,15 @@ public class Character extends Obj {
 		//所有アイテム配列の最後に指定したIDのアイテムを配置
 		//所有アイテムがいっぱいの時、又は、指定したIDが存在しない時は無視
 		if(Util.countItemArr(this.item) < 3) {
-			this.item[Util.countItemArr(this.item)] = Util.findItemById(this.getM().getItemLayer()[x][y], ID1);
+			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID1));
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
 		}
 		if(Util.countItemArr(this.item) < 3) {
-			this.item[Util.countItemArr(this.item)] = Util.findItemById(this.getM().getItemLayer()[x][y], ID2);
+			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID2));
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID2);
 		}
 		if(Util.countItemArr(this.item) < 3) {
-			this.item[Util.countItemArr(this.item)] = Util.findItemById(this.getM().getItemLayer()[x][y], ID3);//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
+			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID3));//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID3);
 		}
 	}
@@ -132,10 +158,10 @@ public class Character extends Obj {
 		}
 	}
 
-	public void attack(Map m, int direction) {
-		int x = m.getPosition(this.getID())[0] + Util.directionVector(direction)[0];
-		int y = m.getPosition(this.getID())[1] + Util.directionVector(direction)[1];
-		m.getCharacterLayer()[x][y].damage(1);
+	public void attack(int direction) {
+		int x = this.getM().getPosition(this.getID())[0] + Util.directionVector(direction)[0];
+		int y = this.getM().getPosition(this.getID())[1] + Util.directionVector(direction)[1];
+		this.getM().getCharacterLayer()[x][y].damage(1);
 	}
 
 	public void die() {

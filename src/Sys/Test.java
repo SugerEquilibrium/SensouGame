@@ -45,7 +45,7 @@ public class Test {
 //		ItemStackCtrl.listItem(map.getItemLayer()[1][2]);
 //		System.out.println();
 
-		c1.takeItem("i1", "i2", "i1");
+		c1.takeItem("i1", "i0", "i1");
 		System.out.println(c1.getName() + " (ID : " + c1.getID() + ") の" + Util.countItemArr(c1.getItem()) + "個の所持品");
 		Util.listItemArr(c1.getItem());
 
@@ -56,37 +56,37 @@ public class Test {
 		System.out.println("\n" + c1.getID() + "に隣接するキャラクター");
 		Util.listCharacterArray(c1.getNextCharcter());
 
-		c1.attack(map, 7);
+		c1.attack(7);
 		System.out.println("c1のHP = " + c1.getHP());
 		System.out.println("c2のHP = " + c2.getHP());
 
 
 		System.out.println(Util.searchNewId(map, "c") + "\n");
-		
-		
+
+
 		Fire cf1 = new Fire(map, 'A');
 		map.setCharacter(0, 2, cf1);
 		map.setCharacter(0, 0, new Fire(map, 'B'));
 		map.setTrap(1, 2, new Flame(map));
-		
+
 //		System.out.println(map.getCharacterLayer()[1][2].getID().equals("c1"));
-		
+
 //		map.printCharacterLayer();
 //		map.printItemLayer();
 		map.printMap();
 
 
-//		GameCtrl.walk(map, cf1, 100);
-		
+//		cf1.walk(100);
+
 		map.getTrapLayer()[1][2].effect(map);
 
 		System.out.println("c1のHP = " + c1.getHP());
-		
+
 		CharacterStatus w1 = new CharacterStatus(c1);
 		CharacterStatus w2 = new CharacterStatus(cf1);
 		CharacterStatus w3 = new CharacterStatus(c2);
 
 //		System.out.println(map.collision(3, 0, 'c'));
-		
+
 	}
 }

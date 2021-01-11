@@ -1,6 +1,11 @@
 package Sys;
 
 import Character.Character;
+import Character.Fire;
+import Character.Hayaashi;
+import Character.Ice;
+import Character.Kinnniku;
+import Character.Mud;
 import Item.Item;
 
 public class Util {
@@ -147,5 +152,24 @@ public class Util {
 		}while(using);
 
 		return ID.toString();
+	}
+	
+	//キャラクタータイプ識別子に応じたキャラクターを生成し、返します
+	public static Character characterGen(Map m, char team, String type) {
+		Character c;
+		if(type.equals("cf")) {
+			c = new Fire(m, team);
+		}else if(type.equals("ch")) {
+			c = new Hayaashi(m, team);
+		}else if(type.equals("ci")) {
+			c = new Ice(m, team);
+		}else if(type.equals("ck")) {
+			c = new Kinnniku(m, team);
+		}else if(type.equals("cm")) {
+			c = new Mud(m, team);
+		}else {
+			c = new Character();
+		}
+		return c;
 	}
 }

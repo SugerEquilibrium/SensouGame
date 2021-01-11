@@ -30,7 +30,7 @@ public class GameCtrl {
 					System.out.println("その方向には進めません");
 				}
 			}while(m.collision(X, Y, 'c'));
-			c.move(m, direction);
+			c.move(direction);
 			m.printMap();
 			c.setWalkCount(c.getWalkCount() - 1);
 		}

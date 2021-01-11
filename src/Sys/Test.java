@@ -1,26 +1,28 @@
 package Sys;
 import Character.Character;
 import Character.Fire;
+import GUI.CharacterStatus;
 import Item.Item;
 import Land.Land;
+import Trap.Flame;
 import Trap.Trap;
 
 public class Test {
 	public static void test() {
 		Map map = new Map(6, 3);
-		Item i1 = new Item("i1", "testItem1");
-		Item i2 = new Item("i2", "testItem2");
-		Item i3 = new Item("i3", "testItem3");
-		Trap t1 = new Trap("t1", "testTrap1");
-		Land l1 = new Land("l1", "testLand1");
-		Character c1 = new Character("c1", "testCharacter", 'A');
-		Character c2 = new Character("c2", "testCharacter", 'B');
+		Item i1 = new Item(map, "i1", "testItem1");
+		Item i2 = new Item(map, "i2", "testItem2");
+		Item i3 = new Item(map, "i3", "testItem3");
+		Trap f1 = new Flame(map);
+		Land l1 = new Land(map, "l1", "testLand1");
+		Character c1 = new Character(map, "c1", "testCharacter", 'A');
+		Character c2 = new Character(map, "c2", "testCharacter", 'B');
 //		map.setCharacter(2,3,c1);
 		map.setItem(1, 2, i1);
 		map.setItem(1, 2, i2);
 		map.setItem(1, 2, i1);
 		map.setItem(1, 2, i3);
-		map.setTrap(1, 2, t1);
+		map.setTrap(1, 2, f1);
 		map.setLand(1, 2, l1);
 		map.setCharacter(1,2, c1);
 //		System.out.println(map.findItemById(1, 2, "i1"));
@@ -36,14 +38,14 @@ public class Test {
 
 //		System.out.println(map.collision(12, 12, 'c'));
 
-		c1.move(map, 6);
-		c1.move(map, 6);
-		c1.move(map, 6);
+		c1.move(6);
+		c1.move(6);
+		c1.move(6);
 
 //		ItemStackCtrl.listItem(map.getItemLayer()[1][2]);
 //		System.out.println();
 
-		c1.takeItem(map, "i1", "i2", "i0");
+		c1.takeItem("i1", "i2", "i1");
 		System.out.println(c1.getName() + " (ID : " + c1.getID() + ") の" + Util.countItemArr(c1.getItem()) + "個の所持品");
 		Util.listItemArr(c1.getItem());
 
@@ -52,7 +54,7 @@ public class Test {
 		map.setCharacter(0, 1, c2);
 
 		System.out.println("\n" + c1.getID() + "に隣接するキャラクター");
-		Util.listCharacterArray(c1.getNextCharcter(map));
+		Util.listCharacterArray(c1.getNextCharcter());
 
 		c1.attack(map, 7);
 		System.out.println("c1のHP = " + c1.getHP());
@@ -64,6 +66,8 @@ public class Test {
 		
 		Fire cf1 = new Fire(map, 'A');
 		map.setCharacter(0, 2, cf1);
+		map.setCharacter(0, 0, new Fire(map, 'B'));
+		map.setTrap(1, 2, new Flame(map));
 		
 //		System.out.println(map.getCharacterLayer()[1][2].getID().equals("c1"));
 		
@@ -72,8 +76,17 @@ public class Test {
 		map.printMap();
 
 
-//		GameCtrl.walk(map, c1, 100);
+//		GameCtrl.walk(map, cf1, 100);
+		
+		map.getTrapLayer()[1][2].effect(map);
+
+		System.out.println("c1のHP = " + c1.getHP());
+		
+		CharacterStatus w1 = new CharacterStatus(c1);
+		CharacterStatus w2 = new CharacterStatus(cf1);
+		CharacterStatus w3 = new CharacterStatus(c2);
 
 //		System.out.println(map.collision(3, 0, 'c'));
+		
 	}
 }

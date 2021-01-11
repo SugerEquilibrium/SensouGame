@@ -1,5 +1,6 @@
 package Item;
 
+import Sys.Map;
 import Sys.Obj;
 
 public class Item extends Obj{
@@ -8,7 +9,7 @@ public class Item extends Obj{
 		super("i0", "");
 	}
 	
-	public Item(String ID, String name){
-		super(ID, name);
+	public Item(Map m, String ID, String name){
+		super(m, ID, name);
 	}
 }

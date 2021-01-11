@@ -1,14 +1,19 @@
 package Trap;
 
+import Sys.Map;
 import Sys.Obj;
 
 public class Trap extends Obj{
 
 	public Trap() {
-		super("i0", "");
+		super("t0", "");
 	}
-	
-	public Trap(String ID, String name){
-		super(ID, name);
+
+	public Trap(Map m, String ID, String name){
+		super(m, ID, name);
+	}
+
+	public void effect(Map m) {
+
 	}
 }

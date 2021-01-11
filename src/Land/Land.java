@@ -1,5 +1,6 @@
 package Land;
 
+import Sys.Map;
 import Sys.Obj;
 
 public class Land extends Obj{
@@ -8,7 +9,7 @@ public class Land extends Obj{
 		super("l0", "");
 	}
 	
-	public Land(String ID, String name){
-		super(ID, name);
+	public Land(Map m, String ID, String name){
+		super(m, ID, name);
 	}
 }

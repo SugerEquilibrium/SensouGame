@@ -48,13 +48,13 @@ public class Map {
 		Item ie = new Item();
 		Trap te = new Trap();
 		Land le = new Land();
-		for(int x1 = 0; x1 < Xsize; x1++) {
-			for(int y1 = 0; y1 < Ysize; y1++) {
+		for(int x1 = 0; x1 < this.Xsize; x1++) {
+			for(int y1 = 0; y1 < this.Ysize; y1++) {
 				cl[x1][y1] = ce;
 				tl[x1][y1] = te;
 				ll[x1][y1] = le;
-				for(int stack = 0; stack < il[x1][y1].length; stack++) {
-					il[x1][y1][stack] = ie;
+				for(int stack = 0; stack < this.il[x1][y1].length; stack++) {
+					this.il[x1][y1][stack] = ie;
 				}
 			}
 		}
@@ -63,9 +63,13 @@ public class Map {
 	//引数のIDに一致するキャラクターの座標を取得
 	public int[] getPosition(String ID) {
 		int position[] = new int[2];
-		for(int x = 0; x < Xsize; x++) {
-			for(int y = 0; y < Ysize; y++) {
-				if(cl[x][y].getID().equals(ID)) {
+		for(int x = 0; x < this.Xsize; x++) {
+			for(int y = 0; y < this.Ysize; y++) {
+				if(this.cl[x][y].getID().equals(ID)) {
+					position[0] = x;
+					position[1] = y;
+				}
+				if(this.tl[x][y].getID().equals(ID)) {
 					position[0] = x;
 					position[1] = y;
 				}
@@ -151,17 +155,17 @@ public class Map {
 		}
 		switch (c){
 		case 'c':
-			if(!cl[x][y].getName().equals("")) {
+			if(!cl[x][y].getID().equals("c0")) {
 				collision = true;
 			}
 			break;
 		case 'i':
-			if(!cl[x][y].getName().equals("")) {
+			if(!cl[x][y].getID().equals("i0")) {
 				collision = true;
 			}
 			break;
 		case 't':
-			if(!tl[x][y].getName().equals("")) {
+			if(!tl[x][y].getID().equals("t0")) {
 				collision = true;
 			}
 			break;
@@ -275,24 +279,45 @@ public class Map {
 	}
 
 	public void printMap() {
-
+		
+		//表示名を決定
+		//displayNameの文字列を変更することで簡単に表示名のフォーマットを変更できる
+		String displayNameC[][] = new String[this.Xsize][this.Ysize];
+		String displayNameI[][][] = new String[this.Xsize][this.Ysize][100];
+		String displayNameT[][] = new String[this.Xsize][this.Ysize];
+		String displayNameL[][] = new String[this.Xsize][this.Ysize];
+		for(int x = 0; x < Xsize; x++) {
+			for(int y = 0; y < Ysize; y++) {
+				if(this.cl[x][y].getTeam() == 0) {				
+					displayNameC[x][y] = "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName();
+				}else {
+					displayNameC[x][y] =  "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName() + " (" + this.cl[x][y].getTeam() + ")";
+				}
+				displayNameT[x][y] = "[" + this.tl[x][y].getID() + "] " + this.tl[x][y].getName();
+				displayNameL[x][y] = "[" + this.ll[x][y].getID() + "] " + this.ll[x][y].getName();
+				for(int stack = 0; stack < 100; stack++) {
+					displayNameI[x][y][stack] = "[" + this.il[x][y][stack].getID() + "] " + this.il[x][y][stack].getName();
+				}
+			}
+		}
+		
 		//列の横幅の最大を決定
 		int widthMax[] = new int[Xsize];
 		for(int x = 0; x < Xsize; x++) {
 			widthMax[x] = 0;
 			for(int y = 0; y < Ysize; y++) {
-				if(widthMax[x] < this.cl[x][y].getName().length()) {
-					widthMax[x] = this.cl[x][y].getName().length();
+				if(widthMax[x] < displayNameC[x][y].length()) {
+					widthMax[x] = displayNameC[x][y].length();
 				}
-				if(widthMax[x] < this.tl[x][y].getName().length()) {
-					widthMax[x] = this.tl[x][y].getName().length();
+				if(widthMax[x] < displayNameT[x][y].length()) {
+					widthMax[x] = displayNameT[x][y].length();
 				}
-				if(widthMax[x] < this.ll[x][y].getName().length()) {
-					widthMax[x] = this.ll[x][y].getName().length();
+				if(widthMax[x] < displayNameL[x][y].length()) {
+					widthMax[x] = displayNameL[x][y].length();
 				}
 				for(int stack = 0; stack < Util.countItemArr(this.il[x][y]) + 1; stack++) {
-					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
-						widthMax[x] = this.il[x][y][stack].getName().length();
+					if(widthMax[x] < displayNameI[x][y][stack].length()) {
+						widthMax[x] = displayNameI[x][y][stack].length();
 					}
 				}
 			}
@@ -324,8 +349,8 @@ public class Map {
 			//キャラクターレイヤー描画
 			for(int x = 0; x < Xsize; x++) {
 				System.out.print("    |    ");
-				System.out.print(this.cl[x][y].getName());
-				for(int i = 0; i < widthMax[x] - this.cl[x][y].getName().length(); i++) {
+				System.out.print(displayNameC[x][y]);
+				for(int i = 0; i < widthMax[x] - displayNameC[x][y].length(); i++) {
 					System.out.print(" ");
 				}
 			}
@@ -334,8 +359,8 @@ public class Map {
 			for(int stack = heightMax[y]; stack > 0; stack--) {
 				for(int x = 0; x < Xsize; x++) {
 					System.out.print("    |    ");
-					System.out.print(this.il[x][y][stack -1].getName());
-					for(int i = 0; i < widthMax[x] - this.il[x][y][stack -1].getName().length(); i++) {
+					System.out.print(displayNameI[x][y][stack -1]);
+					for(int i = 0; i < widthMax[x] - displayNameI[x][y][stack -1].length(); i++) {
 						System.out.print(" ");
 					}
 				}
@@ -344,8 +369,8 @@ public class Map {
 			//トラップレイヤー描画
 			for(int x = 0; x < Xsize; x++) {
 				System.out.print("    |    ");
-				System.out.print(this.tl[x][y].getName());
-				for(int i = 0; i < widthMax[x] - this.tl[x][y].getName().length(); i++) {
+				System.out.print(displayNameT[x][y]);
+				for(int i = 0; i < widthMax[x] - displayNameT[x][y].length(); i++) {
 					System.out.print(" ");
 				}
 			}
@@ -353,8 +378,8 @@ public class Map {
 			//地形レイヤー描画
 			for(int x = 0; x < Xsize; x++) {
 				System.out.print("    |    ");
-				System.out.print(this.ll[x][y].getName());
-				for(int i = 0; i < widthMax[x] - this.ll[x][y].getName().length(); i++) {
+				System.out.print(displayNameL[x][y]);
+				for(int i = 0; i < widthMax[x] - displayNameL[x][y].length(); i++) {
 					System.out.print(" ");
 				}
 			}

@@ -42,7 +42,7 @@ public class CharacterStatus extends JFrame{
 		this.contentPane.add(item0);
 		this.contentPane.add(item1);
 		this.contentPane.add(item2);
-
+		
 	    this.setVisible(true);
 	}
 }

@@ -46,7 +46,7 @@ public class Test {
 //		System.out.println();
 
 		c1.takeItem("i1", "i0", "i1");
-		System.out.println(c1.getName() + " (ID : " + c1.getID() + ") の" + Util.countItemArr(c1.getItem()) + "個の所持品");
+		System.out.println(c1.getName() + " (ID : " + c1.getID() + ") の" + Util.countObjArr(c1.getItem()) + "個の所持品");
 		Util.listItemArr(c1.getItem());
 
 		System.out.println("\n" + c1.getID() + "の座標 : (" + map.getPosition("c1")[0] + ", " + map.getPosition("c1")[1] + ")");

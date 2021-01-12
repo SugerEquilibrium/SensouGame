@@ -40,7 +40,7 @@ public class Character extends Obj {
 
 	//所有アイテム配列の最後に引数のアイテムを配置
 	public void setItem(Item i) {
-		this.item[Util.countItemArr(this.item)] = i;
+		this.item[Util.countObjArr(this.item)] = i;
 	}
 
 	public Item[] getItem() {
@@ -107,7 +107,7 @@ public class Character extends Obj {
 			this.setWalkCount(this.getWalkCount() - 1);
 		}
 	}
-
+	
 	//同じ座標のアイテム取得
 	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
 	//指定したIDがキャラクターと同じ座標にない場合は無を取得
@@ -116,15 +116,15 @@ public class Character extends Obj {
 		int y = this.getM().getPosition(this.getID())[1];
 		//所有アイテム配列の最後に指定したIDのアイテムを配置
 		//所有アイテムがいっぱいの時、又は、指定したIDが存在しない時は無視
-		if(Util.countItemArr(this.item) < 3) {
+		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID1));
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
 		}
-		if(Util.countItemArr(this.item) < 3) {
+		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID2));
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID2);
 		}
-		if(Util.countItemArr(this.item) < 3) {
+		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM().getItemLayer()[x][y], ID3));//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
 			Util.removeItemById(this.getM().getItemLayer()[x][y], ID3);
 		}
@@ -151,6 +151,8 @@ public class Character extends Obj {
 		return nextCharacter;
 	}
 
+	//引数の値だけHPを減らす
+	//HPが0以下になった時死亡処理が走る
 	public void damage(int damage) {
 		this.HP -= damage;
 		if(this.HP < 0) {
@@ -158,16 +160,22 @@ public class Character extends Obj {
 		}
 	}
 
+	//引数の方向に隣接するキャラクターに1ダメージ
 	public void attack(int direction) {
 		int x = this.getM().getPosition(this.getID())[0] + Util.directionVector(direction)[0];
 		int y = this.getM().getPosition(this.getID())[1] + Util.directionVector(direction)[1];
 		this.getM().getCharacterLayer()[x][y].damage(1);
 	}
 
+	//死亡処理
 	public void die() {
+		int x = this.getM().getPosition(this.getID())[0];
+		int y = this.getM().getPosition(this.getID())[1];
 		this.isDead = true;
 		for(int i = 0; i < this.item.length; i++) {
-			this.getM().setItem(this.getM().getPosition(this.getID())[0], this.getM().getPosition(this.getID())[1], this.item[i]);
+			this.getM().setItem(x, y, this.item[i]);
+			this.item[i] = new Item();
 		}
+		this.getM().getCharacterLayer()[x][y] = new Character();
 	}
 }

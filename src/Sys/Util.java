@@ -54,33 +54,33 @@ public class Util {
 		}
 	}
 
-	//アイテムスタック配列に入っているアイテムの個数を整数で返します
-	public static int countItemArr(Item[] item) {
+	//オブジェクト型配列に入っている実際のオブジェクトの個数を整数で返します
+	public static int countObjArr(Obj[] obj) {
 		int last = 0;
-		if(item.length == 1) {
-			if(!item[0].getID().equals("i0")) {
+		if(obj.length == 1) {
+			if(!obj[0].getName().equals("")) {
 				last = 1;
 			}
 		}else {
-			for(int i = 0; i < item.length; i++) {
-				if(item[i].getID().equals("i0")) {
+			for(int i = 0; i < obj.length; i++) {
+				if(obj[i].getName().equals("")) {
 					last = i;
 					break;
 				}
-				if(i == item.length -1) {
-					last = item.length;
+				if(i == obj.length -1) {
+					last = obj.length;
 				}
 			}
 		}
 		return last;
 	}
 
-	//アイテムスタック配列を読み込み、引数のIDを検索し、スタック番号を返します
-	//同じIDが２つ以上あった場合、スタック番号の大きい法の値を返します
-	public static int itemStackNumber(Item[] item, String ID) {
+	//オブジェクト型配列を読み込み、引数のIDを検索し、配列番号を返します
+	//同じIDが２つ以上あった場合、配列番号の大きい法の値を返します
+	public static int findObjById(Obj[] obj, String ID) {
 		int stack = 99867678;
-		for(int count = 0; count < countItemArr(item); count++) {
-			if(item[count].getID().equals(ID)) {
+		for(int count = 0; count < countObjArr(obj); count++) {
+			if(obj[count].getID().equals(ID)) {
 				stack = count;
 				break;
 			}
@@ -93,7 +93,7 @@ public class Util {
 	//見つからなかった場合は空アイテムを返します
 	public static Item findItemById(Item[] item, String ID) {
 		Item i = new Item();
-		for(int count = 0; count < countItemArr(item); count++) {
+		for(int count = 0; count < countObjArr(item); count++) {
 			if(item[count].getID().equals(ID)) {
 				i = item[count];
 			}
@@ -103,21 +103,21 @@ public class Util {
 
 	//渡されたアイテム配列の内容を全て表示します
 	public static void listItemArr(Item[] item) {
-		for(int stack = 0; stack < countItemArr(item); stack++) {
+		for(int stack = 0; stack < countObjArr(item); stack++) {
 			System.out.println(stack + " : " + item[stack].getName());
 		}
 	}
 
 	//渡されたアイテム型配列の中から、指定したIDのアイテムを一つだけ削除して上詰め
 	public static void removeItemById(Item[] item, String ID) {
-		for(int c = itemStackNumber(item, ID); c < countItemArr(item); c++) {
+		for(int c = findObjById(item, ID); c < countObjArr(item); c++) {
 			item[c] = item[c + 1];
 		}
 	}
 
 	//アイテム配列の空欄を上詰め
 	public static void upShift(Item[] item) {
-		for(int i = 0; i < countItemArr(item); i++) {
+		for(int i = 0; i < countObjArr(item); i++) {
 			removeItemById(item, "i0");
 		}
 	}
@@ -153,7 +153,7 @@ public class Util {
 
 		return ID.toString();
 	}
-	
+
 	//キャラクタータイプ識別子に応じたキャラクターを生成し、返します
 	public static Character characterGen(Map m, char team, String type) {
 		Character c;

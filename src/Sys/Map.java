@@ -85,7 +85,7 @@ public class Map {
 
 	//アイテムを一番上にセット
 	public void setItem(int x, int y, Item i) {
-		this.il[x][y][Util.countItemArr(this.il[x][y])] = i;
+		this.il[x][y][Util.countObjArr(this.il[x][y])] = i;
 	}
 
 	//引数の座標にトラップをセット
@@ -224,7 +224,7 @@ public class Map {
 		for(int x = 0; x < Xsize; x++) {
 			widthMax[x] = 0;
 			for(int y = 0; y < Ysize; y++) {
-				for(int stack = 0; stack < Util.countItemArr(this.il[x][y]) + 1; stack++) {
+				for(int stack = 0; stack < Util.countObjArr(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < this.il[x][y][stack].getName().length()) {
 						widthMax[x] = this.il[x][y][stack].getName().length();
 					}
@@ -237,8 +237,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < Util.countItemArr(this.il[x][y])) {
-					heightMax[y] = Util.countItemArr(this.il[x][y]);
+				if(heightMax[y] < Util.countObjArr(this.il[x][y])) {
+					heightMax[y] = Util.countObjArr(this.il[x][y]);
 				}
 			}
 		}
@@ -279,7 +279,7 @@ public class Map {
 	}
 
 	public void printMap() {
-		
+
 		//表示名を決定
 		//displayNameの文字列を変更することで簡単に表示名のフォーマットを変更できる
 		String displayNameC[][] = new String[this.Xsize][this.Ysize];
@@ -288,7 +288,7 @@ public class Map {
 		String displayNameL[][] = new String[this.Xsize][this.Ysize];
 		for(int x = 0; x < Xsize; x++) {
 			for(int y = 0; y < Ysize; y++) {
-				if(this.cl[x][y].getTeam() == 0) {				
+				if(this.cl[x][y].getTeam() == 0) {
 					displayNameC[x][y] = "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName();
 				}else {
 					displayNameC[x][y] =  "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName() + " (" + this.cl[x][y].getTeam() + ")";
@@ -300,7 +300,7 @@ public class Map {
 				}
 			}
 		}
-		
+
 		//列の横幅の最大を決定
 		int widthMax[] = new int[Xsize];
 		for(int x = 0; x < Xsize; x++) {
@@ -315,7 +315,7 @@ public class Map {
 				if(widthMax[x] < displayNameL[x][y].length()) {
 					widthMax[x] = displayNameL[x][y].length();
 				}
-				for(int stack = 0; stack < Util.countItemArr(this.il[x][y]) + 1; stack++) {
+				for(int stack = 0; stack < Util.countObjArr(this.il[x][y]) + 1; stack++) {
 					if(widthMax[x] < displayNameI[x][y][stack].length()) {
 						widthMax[x] = displayNameI[x][y][stack].length();
 					}
@@ -328,8 +328,8 @@ public class Map {
 		for(int y = 0; y < Ysize; y++) {
 			heightMax[y] = 1;
 			for(int x = 0; x < this.Xsize; x++) {
-				if(heightMax[y] < Util.countItemArr(this.il[x][y])) {
-					heightMax[y] = Util.countItemArr(this.il[x][y]);
+				if(heightMax[y] < Util.countObjArr(this.il[x][y])) {
+					heightMax[y] = Util.countObjArr(this.il[x][y]);
 				}
 			}
 		}

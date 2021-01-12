@@ -20,7 +20,6 @@ public class CharacterStatus extends JFrame{
 
 		updateWindow(c);
 		
-	    this.setVisible(true);
 	}
 	
 	public void updateWindow(Character c) {

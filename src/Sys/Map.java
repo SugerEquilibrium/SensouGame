@@ -14,6 +14,7 @@ public class Map {
 	private Trap tl[][];			//トラップレイヤー
 	private Land ll[][];			//地形レイヤー
 	private GuiMap window;
+	private int startPoint[][];		//スタート地点
 
 	public Character[][] getCharacterLayer(){
 		return this.cl;
@@ -39,13 +40,28 @@ public class Map {
 		return this.Ysize;
 	}
 
+	public GuiMap getWindow() {
+		return this.window;
+	}
+
+	public int[][] getStartPoint(){
+		return this.startPoint;
+	}
+
 	public Map(int x, int y) {
-		Xsize = x;
-		Ysize = y;
+		this.Xsize = x;
+		this.Ysize = y;
 		this.cl = new Character[x][y];
 		this.il = new Item[x][y][100];
 		this.tl = new Trap[x][y];
 		this.ll = new Land[x][y];
+		this.startPoint = new int[2][2];
+		//Aチームのスタート地点
+		this.startPoint[0][0] = 0;
+		this.startPoint[0][1] = 0;
+		//Bチームのスタート地点
+		this.startPoint[1][0] = this.Xsize;
+		this.startPoint[1][1] = this.Ysize;
 		Character ce = new Character();
 		Item ie = new Item();
 		Trap te = new Trap();
@@ -398,11 +414,11 @@ public class Map {
 			System.out.print("+\n");
 		}
 	}
-	
+
 	public void createMapWindow() {
 		this.window = new GuiMap(this);
 	}
-	
+
 	public void updateMapWindow() {
 		this.window.updateWindow(this);
 	}

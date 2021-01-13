@@ -14,7 +14,10 @@ public class Test2 {
 		p1.createCharacterStatusWindow();
 		p1.createPlayerStatusWindow();
 		
-		m.printMap();
+//		m.printMap();
 		m.createMapWindow();
+		
+		p1.getParty()[1].walk(2);
+		m.updateMapWindow();
 	}
 }

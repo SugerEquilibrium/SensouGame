@@ -95,6 +95,7 @@ public class Character extends Obj {
 				System.out.println("歩く方向を指定してください");
 				x = this.getM().getPosition(this.getID())[0];
 				y = this.getM().getPosition(this.getID())[1];
+				//方向番号をキーボードから読み取ります
 				direction = new java.util.Scanner(System.in).nextInt();
 				X = x + Util.directionVector(direction)[0];
 				Y = y + Util.directionVector(direction)[1];
@@ -103,7 +104,7 @@ public class Character extends Obj {
 				}
 			}while(this.getM().collision(X, Y, 'c'));
 			this.move(direction);
-			this.getM().printMap();
+			this.getM().updateMapWindow();
 			this.setWalkCount(this.getWalkCount() - 1);
 		}
 	}
@@ -177,5 +178,23 @@ public class Character extends Obj {
 			this.item[i] = new Item();
 		}
 		this.getM().getCharacterLayer()[x][y] = new Character();
+	}
+	
+	//ユーザの選択を引数で受け取り、それに対応した行動を実行する
+	//キャラクターごとにオーバーライド
+	public void action(int userSelect, int direction) {
+		switch(userSelect) {
+		case 0:
+			attack(direction);
+		}
+	}
+	
+	//自分の全てのアクションをString型配列で返します
+	//キャラクターごとにオーバーライド
+	//String型配列の順番はactionメソッドと同じにするように
+	public String[] listAction() {
+		String[] action = new String[1];
+		action[0] = "attack";
+		return action;
 	}
 }

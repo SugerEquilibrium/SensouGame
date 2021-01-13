@@ -16,7 +16,7 @@ public class GuiMap extends JFrame{
 	
 	public GuiMap(Map m) {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000, 500);
+		this.setSize(800, 400);
 		this.contentPane = getContentPane();
 		this.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
@@ -24,7 +24,8 @@ public class GuiMap extends JFrame{
 	}
 
 	public void updateWindow(Map m) {
-		
+
+		this.contentPane.removeAll();
 		sb = new StringBuilder("<html>");
 		
 		//表示名を決定

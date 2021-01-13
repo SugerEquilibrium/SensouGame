@@ -19,7 +19,8 @@ public class GameCtrl {
 
 	public static void turnCtrl(Player p1, Player p2) {
 		for(int i = 0; i < 3; i++) {
-
+			System.out.println(p1.getTeam() + "チームのターン");
+			
 		}
 	}
 }

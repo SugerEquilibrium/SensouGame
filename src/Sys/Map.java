@@ -1,6 +1,7 @@
 package Sys;
 
 import Character.Character;
+import GUI.GuiMap;
 import Item.Item;
 import Land.Land;
 import Trap.Trap;
@@ -12,6 +13,7 @@ public class Map {
 	private Item il[][][];			//アイテムレイヤー (最大100アイテムまで保管可能)
 	private Trap tl[][];			//トラップレイヤー
 	private Land ll[][];			//地形レイヤー
+	private GuiMap window;
 
 	public Character[][] getCharacterLayer(){
 		return this.cl;
@@ -395,5 +397,13 @@ public class Map {
 			}
 			System.out.print("+\n");
 		}
+	}
+	
+	public void createMapWindow() {
+		this.window = new GuiMap(this);
+	}
+	
+	public void updateMapWindow() {
+		this.window.updateWindow(this);
 	}
 }

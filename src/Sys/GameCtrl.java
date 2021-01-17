@@ -49,22 +49,32 @@ public class GameCtrl {
 
 	public static void playerAction(Map m, Player p, int partyNum) {
 		System.out.println(p.getTeam() + " チーム " + p.getParty()[partyNum].getName() + " のターン");
+		int direction;
 
-		int walkMax = dice();
 		//歩く歩数の最大値をセット
-		p.getParty()[partyNum].setWalkCountMax(walkMax);
-		System.out.println(walkMax + "歩あるいてください");
-		//歩く
-		p.getParty()[partyNum].walk(walkMax);
+		int walkMax = dice();
 
+		//歩く
+		System.out.println(walkMax + "歩あるいてください");
+		for(int i = 0; i < walkMax; i++) {
+			System.out.println("方向を指定してください");
+			direction = new java.util.Scanner(System.in).nextInt();
+			boolean isGo = p.getParty()[partyNum].move(direction);
+			if(!isGo) {
+				i = i - 1;
+				System.out.println("その方向には進めません");
+			}
+			m.updateMapWindow();
+		}
+
+		//アクション
 		System.out.println("アクションを選択してください");
-		//アクションを全て表示
 		for(int a = 0; a < p.getParty()[partyNum].listAction().length; a++) {
 			System.out.println(a + " : " + p.getParty()[partyNum].listAction()[a]);
 		}
 		int selection = new java.util.Scanner(System.in).nextInt();
 		System.out.print("方向を指定してください : ");
-		int direction = new java.util.Scanner(System.in).nextInt();
+		direction = new java.util.Scanner(System.in).nextInt();
 		p.getParty()[partyNum].action(selection, direction);
 	}
 

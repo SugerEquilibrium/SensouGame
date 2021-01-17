@@ -1,5 +1,6 @@
 package Character;
 
+import Exc.OutsideExc;
 import Item.Item;
 import Sys.Map;
 import Sys.Obj;
@@ -9,8 +10,6 @@ public class Character extends Obj {
 	private int HP;
 	private int HPMAX = 5;
 	private Item item[];
-	private int walkCount;
-	private int walkCountMax;	//1~6
 	private char team;
 	private boolean isDead;
 
@@ -30,7 +29,7 @@ public class Character extends Obj {
 		super("c0", "");
 		this.HP = 0;
 		this.team = 0;
-		this.isDead = false;
+//		this.isDead = false;
 		this.item = new Item[3];
 		for(int i = 0; i < this.item.length; i++) {
 			this.item[i] = new Item();
@@ -54,22 +53,6 @@ public class Character extends Obj {
 		return this.item;
 	}
 
-	public void setWalkCount(int walk) {
-		this.walkCount = walk;
-	}
-
-	public int getWalkCount() {
-		return this.walkCount;
-	}
-
-	public void setWalkCountMax(int walkmax) {
-		this.walkCountMax = walkmax;
-	}
-
-	public int getWalkCountMax() {
-		return this.walkCountMax;
-	}
-
 	public void setTeam(char team) {
 		this.team = team;
 	}
@@ -82,40 +65,24 @@ public class Character extends Obj {
 		return isDead;
 	}
 
-	public void move(int direction) {
-		int x = this.getM().getPosition(this.getID())[0];
-		int y = this.getM().getPosition(this.getID())[1];
-		int X = x + Util.directionVector(direction)[0];
-		int Y = y + Util.directionVector(direction)[1];
-		this.getM().moveCharacter(x, y, X, Y);
-	}
-	
-	//引数のキャラクターをwalk回ユーザの方向を読み取り移動させます
-	public void walk(int walk) {
-		int x;
-		int y;
-		int X;
-		int Y;
-		int direction;
-		for(int i = 0; i < walk; i++) {
-			do {
-				System.out.println("歩く方向を指定してください");
-				x = this.getM().getPosition(this.getID())[0];
-				y = this.getM().getPosition(this.getID())[1];
-				//方向番号をキーボードから読み取ります
-				direction = new java.util.Scanner(System.in).nextInt();
-				X = x + Util.directionVector(direction)[0];
-				Y = y + Util.directionVector(direction)[1];
-				if(this.getM().collision(X, Y, 'c')) {
-					System.out.println("その方向には進めません");
-				}
-			}while(this.getM().collision(X, Y, 'c'));
-			this.move(direction);
-			this.getM().updateMapWindow();
-			this.setWalkCount(this.getWalkCount() - 1);
+	//引数の方向番号の方向にキャラクターを１移動させる
+	//移動できなかった場合はfalseを戻す
+	public boolean move(int direction) {
+		boolean g = true;
+		try {
+			int x = this.getM().getPosition(this.getID())[0];
+			int y = this.getM().getPosition(this.getID())[1];
+			int X = x + Util.directionVector(direction)[0];
+			int Y = y + Util.directionVector(direction)[1];
+			this.getM().isOutSide(X, Y);
+			this.getM().moveCharacter(x, y, X, Y);
+		}catch(OutsideExc e){
+			g = false;
 		}
+		return g;
 	}
-	
+
+
 	//同じ座標のアイテム取得
 	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
 	//指定したIDがキャラクターと同じ座標にない場合は無を取得
@@ -150,7 +117,7 @@ public class Character extends Obj {
 		for(int i = 0; i < nextCharacter.length; i++) {
 			X = x + Util.directionVector(i)[0];
 			Y = y + Util.directionVector(i)[1];
-			if(this.getM().outSideError(X, Y)) {
+			if(this.getM().isOutSide(X, Y)) {
 				nextCharacter[i] = new Character();
 			}else {
 				nextCharacter[i] = this.getM().getCharacterLayer()[X][Y];
@@ -186,7 +153,7 @@ public class Character extends Obj {
 		}
 		this.getM().getCharacterLayer()[x][y] = new Character();
 	}
-	
+
 	//ユーザの選択を引数で受け取り、それに対応した行動を実行する
 	//キャラクターごとにオーバーライド
 	public void action(int userSelect, int direction) {
@@ -198,7 +165,7 @@ public class Character extends Obj {
 			break;
 		}
 	}
-	
+
 	//自分の全てのアクションをString型配列で返します
 	//キャラクターごとにオーバーライド
 	//String型配列の順番はactionメソッドと同じにするように

@@ -1,6 +1,7 @@
 package Sys;
 
 import Character.Character;
+import Exc.OutsideExc;
 import GUI.GuiMap;
 import Item.Item;
 import Land.Land;
@@ -156,39 +157,36 @@ public class Map {
 	}
 
 	//引数の座標が盤面の範囲外かどうかをboolean型で返します
-	public boolean outSideError(int x, int y) {
+	public boolean isOutSide(int x, int y) {
 		boolean out = false;
 		if(x >= this.Xsize || y >= this.Ysize || x < 0 || y < 0) {
 			out = true;
+			throw new OutsideExc("マップの範囲外を指定しています");
 		}
 		return out;
 	}
 
 	//引数の座標にオブジェクトが入れるかどうかをboolean型で返します
-	public boolean collision(int x, int y, char c) {
-		boolean collision = false;
-		if(outSideError(x, y)) {
-			collision = true;
-			return collision;
-		}
+	public boolean isOverLap(int x, int y, char c) {
+		boolean isOverLap = false;
 		switch (c){
 		case 'c':
 			if(!cl[x][y].getID().equals("c0")) {
-				collision = true;
+				isOverLap = true;
 			}
 			break;
 		case 'i':
 			if(!cl[x][y].getID().equals("i0")) {
-				collision = true;
+				isOverLap = true;
 			}
 			break;
 		case 't':
 			if(!tl[x][y].getID().equals("t0")) {
-				collision = true;
+				isOverLap = true;
 			}
 			break;
 		}
-		return collision;
+		return isOverLap;
 	}
 
 	public void printCharacterLayer() {

@@ -13,11 +13,11 @@ public class Test2 {
 		p1.getParty()[0].die();
 		p1.createCharacterStatusWindow();
 		p1.createPlayerStatusWindow();
-		
+
 //		m.printMap();
 		m.createMapWindow();
-		
-		p1.getParty()[1].walk(2);
+
+		p1.getParty()[1].move(2);
 		m.updateMapWindow();
 	}
 }

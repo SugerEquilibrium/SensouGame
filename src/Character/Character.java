@@ -28,6 +28,13 @@ public class Character extends Obj {
 	//空欄のますにはこれを使用して埋める
 	public Character() {
 		super("c0", "");
+		this.HP = 0;
+		this.team = 0;
+		this.isDead = false;
+		this.item = new Item[3];
+		for(int i = 0; i < this.item.length; i++) {
+			this.item[i] = new Item();
+		}
 	}
 
 	public void setHP(int HP) {
@@ -185,7 +192,10 @@ public class Character extends Obj {
 	public void action(int userSelect, int direction) {
 		switch(userSelect) {
 		case 0:
+			break;
+		case 1:
 			attack(direction);
+			break;
 		}
 	}
 	
@@ -193,8 +203,9 @@ public class Character extends Obj {
 	//キャラクターごとにオーバーライド
 	//String型配列の順番はactionメソッドと同じにするように
 	public String[] listAction() {
-		String[] action = new String[1];
-		action[0] = "attack";
+		String[] action = new String[2];
+		action[0] = "なにもしない";
+		action[1] = "attack";
 		return action;
 	}
 }

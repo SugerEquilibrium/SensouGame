@@ -60,8 +60,8 @@ public class Map {
 		this.startPoint[0][0] = 0;
 		this.startPoint[0][1] = 0;
 		//Bチームのスタート地点
-		this.startPoint[1][0] = this.Xsize;
-		this.startPoint[1][1] = this.Ysize;
+		this.startPoint[1][0] = this.Xsize - 1;
+		this.startPoint[1][1] = this.Ysize - 1;
 		Character ce = new Character();
 		Item ie = new Item();
 		Trap te = new Trap();

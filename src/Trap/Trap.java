@@ -5,8 +5,8 @@ import Sys.Obj;
 
 public class Trap extends Obj{
 
-	public Trap() {
-		super("t0", "");
+	public Trap(Map m) {
+		super(m, "t0", "");
 	}
 
 	public Trap(Map m, String ID, String name){

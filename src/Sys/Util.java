@@ -91,8 +91,8 @@ public class Util {
 	//アイテムスタック配列を読み込み、引数のIDを検索し、アイテム型変数を返します
 	//同じIDが２つ以上あった場合、スタック番号の大きい方の値を返します
 	//見つからなかった場合は空アイテムを返します
-	public static Item findItemById(Item[] item, String ID) {
-		Item i = new Item();
+	public static Item findItemById(Map m, Item[] item, String ID) {
+		Item i = new Item(m);
 		for(int count = 0; count < countObjArr(item); count++) {
 			if(item[count].getID().equals(ID)) {
 				i = item[count];
@@ -137,7 +137,7 @@ public class Util {
 					if(m.getCharacterLayer()[x][y].getID().equals(ID.toString())) {
 						using = true;
 					}
-					else if(!findItemById(m.getItemLayer()[x][y], ID.toString()).getID().equals("i0")) {
+					else if(!findItemById(m, m.getItemLayer()[x][y], ID.toString()).getID().equals("i0")) {
 						using = true;
 					}
 					else if(m.getTrapLayer()[x][y].getID().equals(ID.toString())) {
@@ -168,7 +168,7 @@ public class Util {
 		}else if(type.equals("cm")) {
 			c = new Mud(m, team);
 		}else {
-			c = new Character();
+			c = new Character(m);
 		}
 		return c;
 	}

@@ -1,7 +1,6 @@
 package Sys;
 
 import Character.Character;
-import Exc.OutsideExc;
 import GUI.GuiMap;
 import Item.Item;
 import Land.Land;
@@ -63,10 +62,10 @@ public class Map {
 		//Bチームのスタート地点
 		this.startPoint[1][0] = this.Xsize - 1;
 		this.startPoint[1][1] = this.Ysize - 1;
-		Character ce = new Character();
-		Item ie = new Item();
-		Trap te = new Trap();
-		Land le = new Land();
+		Character ce = new Character(this);
+		Item ie = new Item(this);
+		Trap te = new Trap(this);
+		Land le = new Land(this);
 		for(int x1 = 0; x1 < this.Xsize; x1++) {
 			for(int y1 = 0; y1 < this.Ysize; y1++) {
 				cl[x1][y1] = ce;
@@ -119,7 +118,7 @@ public class Map {
 
 	//引数の座標のキャラクターを消去
 	public void removeCharacter(int x, int y) {
-		this.cl[x][y] = new Character();
+		this.cl[x][y] = new Character(this);
 	}
 
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し、削除、上詰め
@@ -129,12 +128,12 @@ public class Map {
 
 	//引数の座標のトラップを削除
 	public void removeTrap(int x, int y) {
-		this.tl[x][y] = new Trap();
+		this.tl[x][y] = new Trap(this);
 	}
 
 	//引数の座標の地形オブジェクトを削除
 	public void removeLand(int x, int y) {
-		this.ll[x][y] = new Land();
+		this.ll[x][y] = new Land(this);
 	}
 
 	//座標(x -> X, y -> Y)にキャラクターを移動
@@ -146,7 +145,7 @@ public class Map {
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
 	public void moveItem(int x, int y, String ID, int X, int Y) {
-		setItem(X, Y, Util.findItemById(this.il[x][y], ID));
+		setItem(X, Y, Util.findItemById(this, this.il[x][y], ID));
 		removeItem(x, y, ID);
 	}
 
@@ -161,7 +160,7 @@ public class Map {
 		boolean out = false;
 		if(x >= this.Xsize || y >= this.Ysize || x < 0 || y < 0) {
 			out = true;
-			throw new OutsideExc("マップの範囲外を指定しています");
+//			throw new OutsideExc("マップの範囲外を指定しています");
 		}
 		return out;
 	}

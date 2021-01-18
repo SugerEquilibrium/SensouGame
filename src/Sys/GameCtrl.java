@@ -1,4 +1,5 @@
 package Sys;
+import Character.Character;
 
 public class GameCtrl {
 
@@ -50,6 +51,8 @@ public class GameCtrl {
 	public static void playerAction(Map m, Player p, int partyNum) {
 		System.out.println(p.getTeam() + " チーム " + p.getParty()[partyNum].getName() + " のターン");
 		int direction;
+		
+		System.out.println("a fff : " + Util.searchNewId(m, "ch"));
 
 		//歩く歩数の最大値をセット
 		int walkMax = dice();
@@ -67,13 +70,20 @@ public class GameCtrl {
 			m.updateMapWindow();
 		}
 
-		//アクション
+		//アクション選択
 		System.out.println("アクションを選択してください");
 		for(int a = 0; a < p.getParty()[partyNum].listAction().length; a++) {
 			System.out.println(a + " : " + p.getParty()[partyNum].listAction()[a]);
 		}
 		int selection = new java.util.Scanner(System.in).nextInt();
+		
+		//アクションの内容はキャラクタークラスにあるべき
 		System.out.print("方向を指定してください : ");
+		//隣接するキャラクターを取得
+		Character nextChar[] = p.getParty()[partyNum].getNextCharacter();
+		for(int i = 0; i < nextChar.length; i++) {
+			System.out.println(i + nextChar[i].getName());
+		}
 		direction = new java.util.Scanner(System.in).nextInt();
 		p.getParty()[partyNum].action(selection, direction);
 	}

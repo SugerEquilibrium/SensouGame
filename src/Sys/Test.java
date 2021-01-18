@@ -54,7 +54,7 @@ public class Test {
 		map.setCharacter(0, 1, c2);
 
 		System.out.println("\n" + c1.getID() + "に隣接するキャラクター");
-		Util.listCharacterArray(c1.getNextCharcter());
+		Util.listCharacterArray(c1.getNextCharacter());
 
 		c1.attack(7);
 		System.out.println("c1のHP = " + c1.getHP());

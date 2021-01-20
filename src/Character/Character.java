@@ -161,10 +161,13 @@ public class Character extends Obj {
 	//引数の値だけHPを減らす
 	//HPが0以下になった時死亡処理が走る
 	public void damage(int damage) {
-		this.HP -= damage;
-		if(this.HP < 0) {
+		int HP = this.HP;
+		HP -= damage;
+		if(HP < 0) {
+			HP = 0;
 			die();
 		}
+		this.HP = HP;
 	}
 
 	//引数の方向に隣接するキャラクターに1ダメージ
@@ -177,7 +180,7 @@ public class Character extends Obj {
 			if(this.getM().isOutSide(X, Y)) {
 				throw new OutsideExc("マップの範囲外を指定しています");
 			}
-			this.getM().getCharacterLayer()[X][Y].damage(1);
+			this.getM().getCharacterLayer()[X][Y].damage(133);
 		}catch(OutsideExc e) {
 			;
 		}
@@ -186,9 +189,9 @@ public class Character extends Obj {
 	//死亡処理
 	//空キャラクターの場合は処理をスキップ
 	public void die() {
-//		if(this.getType().equals("")) {
-//			;
-//		}else {
+		if(this.getType().equals("")) {
+			;
+		}else {
 			int x = this.getPosition()[0];
 			int y = this.getPosition()[1];
 			this.isDead = true;
@@ -197,7 +200,7 @@ public class Character extends Obj {
 				this.item[i] = new Item(this.getM());
 			}
 			this.getM().getCharacterLayer()[x][y] = new Character(this.getM());
-//		}
+		}
 	}
 
 	//ユーザの選択を引数で受け取り、それに対応した行動を実行する

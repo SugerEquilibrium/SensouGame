@@ -19,20 +19,20 @@ public class CharacterStatus extends JFrame{
 		this.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
 		updateWindow(c);
-		
+
 	}
-	
+
 	public void updateWindow(Character c) {
 		this.contentPane.removeAll();
 		JLabel name = new JLabel("NAME : " + c.getName());
-		JLabel ID = new JLabel("ID : " + c.getID());
+		JLabel ID = new JLabel("TYPE : " + c.getType());
 		JLabel team = new JLabel("team : " + c.getTeam());
 		JLabel HP = new JLabel("HP : " + c.getHP() + "/5");
 		JLabel dead = new JLabel("dead : " + c.isDead());
 		JLabel item0 = new JLabel("item0 : " + c.getItem()[0].getName());
 		JLabel item1 = new JLabel("item1 : " + c.getItem()[1].getName());
 		JLabel item2 = new JLabel("item2 : " + c.getItem()[2].getName());
-		
+
 		this.contentPane.add(name);
 		this.contentPane.add(ID);
 		this.contentPane.add(team);
@@ -41,7 +41,7 @@ public class CharacterStatus extends JFrame{
 		this.contentPane.add(item0);
 		this.contentPane.add(item1);
 		this.contentPane.add(item2);
-		
+
 	    this.setVisible(true);
 	}
 }

@@ -31,7 +31,7 @@ public class Test {
 
 //		map.removeItem(1, 2, map.findItemById(1, 2, "i1"));
 //		map.moveItem(1, 2, "i1", 2, 2);
-		map.moveCharacter(1, 2, 4, 2);
+//		map.move(1, 2, 4, 2);
 		map.moveTrap(1, 2, 3, 0);
 
 //		map.listStackedItem(1, 2);
@@ -46,14 +46,14 @@ public class Test {
 //		System.out.println();
 
 		c1.takeItem("i1", "i0", "i1");
-		System.out.println(c1.getName() + " (ID : " + c1.getID() + ") の" + Util.countObjArr(c1.getItem()) + "個の所持品");
+		System.out.println(c1.getName() + " (ID : " + c1.getType() + ") の" + Util.countObjArr(c1.getItem()) + "個の所持品");
 		Util.listItemArr(c1.getItem());
 
-		System.out.println("\n" + c1.getID() + "の座標 : (" + map.getPosition("c1")[0] + ", " + map.getPosition("c1")[1] + ")");
+		System.out.println("\n" + c1.getType() + "の座標 : (" + c1.getPosition()[0] + ", " + c1.getPosition()[1] + ")");
 
 		map.setCharacter(0, 1, c2);
 
-		System.out.println("\n" + c1.getID() + "に隣接するキャラクター");
+		System.out.println("\n" + c1.getType() + "に隣接するキャラクター");
 		Util.listCharacterArray(c1.getNextCharacter());
 
 		c1.attack(7);
@@ -61,7 +61,7 @@ public class Test {
 		System.out.println("c2のHP = " + c2.getHP());
 
 
-		System.out.println(Util.searchNewId(map, "c") + "\n");
+//		System.out.println(Util.searchNewId(map, "c") + "\n");
 
 
 		Fire cf1 = new Fire(map, 'A');

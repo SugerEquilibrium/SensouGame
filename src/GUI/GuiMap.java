@@ -13,13 +13,13 @@ import Sys.Util;
 public class GuiMap extends JFrame{
 	Container contentPane;
 	StringBuilder sb;
-	
+
 	public GuiMap(Map m) {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 400);
 		this.contentPane = getContentPane();
 		this.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-		
+
 		this.updateWindow(m);
 	}
 
@@ -27,7 +27,7 @@ public class GuiMap extends JFrame{
 
 		this.contentPane.removeAll();
 		sb = new StringBuilder("<html>");
-		
+
 		//表示名を決定
 		//displayNameの文字列を変更することで簡単に表示名のフォーマットを変更できる
 		String displayNameC[][] = new String[m.getXsize()][m.getYsize()];
@@ -37,14 +37,14 @@ public class GuiMap extends JFrame{
 		for(int x = 0; x < m.getXsize(); x++) {
 			for(int y = 0; y < m.getYsize(); y++) {
 				if(m.getCharacterLayer()[x][y].getTeam() == 0) {
-					displayNameC[x][y] = "[" + m.getCharacterLayer()[x][y].getID() + "] " + m.getCharacterLayer()[x][y].getName();
+					displayNameC[x][y] = "[" + m.getCharacterLayer()[x][y].getType() + "] " + m.getCharacterLayer()[x][y].getName();
 				}else {
-					displayNameC[x][y] =  "[" + m.getCharacterLayer()[x][y].getID() + "] " + m.getCharacterLayer()[x][y].getName() + " (" + m.getCharacterLayer()[x][y].getTeam() + ")";
+					displayNameC[x][y] =  "[" + m.getCharacterLayer()[x][y].getType() + "] " + m.getCharacterLayer()[x][y].getName() + " (" + m.getCharacterLayer()[x][y].getTeam() + ")";
 				}
-				displayNameT[x][y] = "[" + m.getTrapLayer()[x][y].getID() + "] " + m.getTrapLayer()[x][y].getName();
-				displayNameL[x][y] = "[" + m.getLandLayer()[x][y].getID() + "] " + m.getLandLayer()[x][y].getName();
+				displayNameT[x][y] = "[" + m.getTrapLayer()[x][y].getType() + "] " + m.getTrapLayer()[x][y].getName();
+				displayNameL[x][y] = "[" + m.getLandLayer()[x][y].getType() + "] " + m.getLandLayer()[x][y].getName();
 				for(int stack = 0; stack < 100; stack++) {
-					displayNameI[x][y][stack] = "[" + m.getItemLayer()[x][y][stack].getID() + "] " + m.getItemLayer()[x][y][stack].getName();
+					displayNameI[x][y][stack] = "[" + m.getItemLayer()[x][y][stack].getType() + "] " + m.getItemLayer()[x][y][stack].getName();
 				}
 			}
 		}
@@ -144,11 +144,11 @@ public class GuiMap extends JFrame{
 			sb.append("+<br/>");
 		}
 		sb.append("</html>");
-		
+
 		JLabel map = new JLabel(sb.toString());
 		map.setFont(new Font("Ricty Diminished", Font.PLAIN, 14));
 		this.contentPane.add(map);
-		
+
 		this.setVisible(true);
 	}
 }

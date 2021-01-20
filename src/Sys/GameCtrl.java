@@ -1,4 +1,5 @@
 package Sys;
+
 import Character.Character;
 
 public class GameCtrl {
@@ -51,8 +52,6 @@ public class GameCtrl {
 	public static void playerAction(Map m, Player p, int partyNum) {
 		System.out.println(p.getTeam() + " チーム " + p.getParty()[partyNum].getName() + " のターン");
 		int direction;
-		
-		System.out.println("a fff : " + Util.searchNewId(m, "ch"));
 
 		//歩く歩数の最大値をセット
 		int walkMax = dice();
@@ -60,7 +59,7 @@ public class GameCtrl {
 		//歩く
 		System.out.println(walkMax + "歩あるいてください");
 		for(int i = 0; i < walkMax; i++) {
-			System.out.println("方向を指定してください");
+			System.out.println("方向を指定してください (残り歩数" + (walkMax - i) + "歩)");
 			direction = new java.util.Scanner(System.in).nextInt();
 			boolean isGo = p.getParty()[partyNum].move(direction);
 			if(!isGo) {
@@ -76,13 +75,13 @@ public class GameCtrl {
 			System.out.println(a + " : " + p.getParty()[partyNum].listAction()[a]);
 		}
 		int selection = new java.util.Scanner(System.in).nextInt();
-		
+
 		//アクションの内容はキャラクタークラスにあるべき
-		System.out.print("方向を指定してください : ");
+		System.out.print("方向を指定してください");
 		//隣接するキャラクターを取得
 		Character nextChar[] = p.getParty()[partyNum].getNextCharacter();
 		for(int i = 0; i < nextChar.length; i++) {
-			System.out.println(i + nextChar[i].getName());
+			System.out.println(i + " : " + nextChar[i].getName());
 		}
 		direction = new java.util.Scanner(System.in).nextInt();
 		p.getParty()[partyNum].action(selection, direction);

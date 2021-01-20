@@ -13,8 +13,8 @@ public class Character extends Obj {
 	private char team;
 	private boolean isDead;
 
-	public Character(Map m, String ID, String name, char team) {
-		super(m, ID, name);
+	public Character(Map m, String type, String name, char team) {
+		super(m, type, name);
 		this.HP = this.HPMAX;
 		this.isDead = false;
 		this.item = new Item[3];
@@ -23,13 +23,11 @@ public class Character extends Obj {
 			this.item[i] = new Item(m);
 		}
 	}
-
 	//空欄のますにはこれを使用して埋める
 	public Character(Map m) {
-		super(m, "c0", "");
+		super(m, "", "");
 		this.HP = 0;
 		this.team = 0;
-//		this.isDead = false;
 		this.item = new Item[3];
 		for(int i = 0; i < this.item.length; i++) {
 			this.item[i] = new Item(m);
@@ -65,23 +63,29 @@ public class Character extends Obj {
 		return isDead;
 	}
 
+	//座標(x -> X, y -> Y)にキャラクターを移動
+	public void move(int x, int y) {
+		this.getM().removeCharacter(this.getPosition()[0], this.getPosition()[1]);
+		this.getM().setCharacter(x, y, this);
+	}
+
 	//引数の方向番号の方向にキャラクターを１移動させる
 	//移動できなかった場合はfalseを戻す
 	public boolean move(int direction) {
 		boolean g = true;
 		try {
-			int x = this.getM().getPosition(this.getID())[0];
-			int y = this.getM().getPosition(this.getID())[1];
+			int x = this.getPosition()[0];
+			int y = this.getPosition()[1];
 			int X = x + Util.directionVector(direction)[0];
 			int Y = y + Util.directionVector(direction)[1];
 			//マップ外指定例外処理
 			if(this.getM().isOutSide(X, Y)) {
 				throw new OutsideExc("マップの範囲外を指定しています");
 			}
-			if(!this.getM().getCharacterLayer()[X][Y].getID().equals("c0")) {
+			if(!this.getM().getCharacterLayer()[X][Y].getType().equals("")) {
 				g = false;
 			}else {
-				this.getM().moveCharacter(x, y, X, Y);
+				this.move(X, Y);
 			}
 		}catch(OutsideExc e){
 			g = false;
@@ -93,28 +97,28 @@ public class Character extends Obj {
 	//取得するアイテム数を制限したい時は、引数のIDをi0とし、無を取得させる
 	//指定したIDがキャラクターと同じ座標にない場合は無を取得
 	public void takeItem(String ID1, String ID2, String ID3) {
-		int x = this.getM().getPosition(this.getID())[0];
-		int y = this.getM().getPosition(this.getID())[1];
+		int x = this.getPosition()[0];
+		int y = this.getPosition()[1];
 		//所有アイテム配列の最後に指定したIDのアイテムを配置
 		//所有アイテムがいっぱいの時、又は、指定したIDが存在しない時は無視
 		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM(), this.getM().getItemLayer()[x][y], ID1));
-			Util.removeItemById(this.getM().getItemLayer()[x][y], ID1);		//なぜかキャラクターがアイテムをとってくれない問題
+			this.getM().removeItem(x, y, ID1);
 		}
 		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM(), this.getM().getItemLayer()[x][y], ID2));
-			Util.removeItemById(this.getM().getItemLayer()[x][y], ID2);
+			this.getM().removeItem(x, y, ID2);
 		}
 		if(Util.countObjArr(this.item) < 3) {
 			this.setItem(Util.findItemById(this.getM(), this.getM().getItemLayer()[x][y], ID3));//ここで所持アイテム配列が全て初期化されてしまう持アイテム配列を4に増やすと解決するが、、
-			Util.removeItemById(this.getM().getItemLayer()[x][y], ID3);
+			this.getM().removeItem(x, y, ID3);
 		}
 	}
 
 	//自分に隣接するキャラクターの数を整数で返します
 	public int countNextCharacter() {
-		int x = this.getM().getPosition(this.getID())[0];
-		int y = this.getM().getPosition(this.getID())[1];
+		int x = this.getPosition()[0];
+		int y = this.getPosition()[1];
 		int X;
 		int Y;
 		int nextChar = 0;
@@ -123,7 +127,7 @@ public class Character extends Obj {
 			Y = y + Util.directionVector(i)[1];
 			if(this.getM().isOutSide(X, Y)) {
 				;
-			}else if(!this.getM().getCharacterLayer()[X][Y].getID().equals("c0")) {
+			}else if(!this.getM().getCharacterLayer()[X][Y].getType().equals("")) {
 				nextChar++;
 			}
 		}
@@ -132,20 +136,22 @@ public class Character extends Obj {
 
 	//自分に隣接するキャラクターをキャラクター型配列に格納します
 	public Character[] getNextCharacter() {
-		int x = this.getM().getPosition(this.getID())[0];
-		int y = this.getM().getPosition(this.getID())[1];
+		int x = this.getPosition()[0];
+		int y = this.getPosition()[1];
 		int X;
 		int Y;
+		int counter = 0;
 		Character[] nextCharacter = new Character[countNextCharacter()];
-		for(int i = 0; i < nextCharacter.length; i++) {
+		for(int i = 0; i < 8; i++) {
 			X = x + Util.directionVector(i)[0];
 			Y = y + Util.directionVector(i)[1];
 			if(this.getM().isOutSide(X, Y)) {
 				;
-			}else if(this.getM().getCharacterLayer()[X][Y].getID().equals("c0")){
+			}else if(this.getM().getCharacterLayer()[X][Y].getType().equals("")){
 				;
 			}else {
-				nextCharacter[i] = this.getM().getCharacterLayer()[X][Y];				
+				nextCharacter[counter] = this.getM().getCharacterLayer()[X][Y];
+				counter++;
 			}
 		}
 		return nextCharacter;
@@ -163,8 +169,8 @@ public class Character extends Obj {
 	//引数の方向に隣接するキャラクターに1ダメージ
 	public void attack(int direction) {
 		try {
-			int x = this.getM().getPosition(this.getID())[0] + Util.directionVector(direction)[0];
-			int y = this.getM().getPosition(this.getID())[1] + Util.directionVector(direction)[1];
+			int x = this.getPosition()[0];
+			int y = this.getPosition()[1];
 			if(this.getM().isOutSide(x, y)) {
 				throw new OutsideExc("マップの範囲外を指定しています");
 			}
@@ -176,8 +182,8 @@ public class Character extends Obj {
 
 	//死亡処理
 	public void die() {
-		int x = this.getM().getPosition(this.getID())[0];
-		int y = this.getM().getPosition(this.getID())[1];
+		int x = this.getPosition()[0];
+		int y = this.getPosition()[1];
 		this.isDead = true;
 		for(int i = 0; i < this.item.length; i++) {
 			this.getM().setItem(x, y, this.item[i]);

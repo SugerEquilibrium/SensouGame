@@ -6,7 +6,7 @@ import Sys.Obj;
 public class Land extends Obj{
 
 	public Land(Map m) {
-		super(m, "l0", "");
+		super(m, "", "");
 	}
 
 	public Land(Map m, String ID, String name){

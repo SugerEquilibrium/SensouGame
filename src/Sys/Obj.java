@@ -1,21 +1,19 @@
 package Sys;
 
 public abstract class Obj {
-	private String ID;	//IDは変数名と同じにすること
 	private String name;
 	private String type;
 	private Map m;
+	private int position[];	//座標をここに格納
 
-	public Obj(Map m, String ID, String name){
-		this.ID = ID;
+	public Obj(Map m, String type, String name){
 		this.name = name;
 		this.m = m;
-		this.type = ID.replaceAll("[0-9]", "");	//IDの番号部分だけ削除しオブジェクトタイプを代入する
-	}
-	public Obj(String ID, String name) {
-		this.ID = ID;
-		this.name = name;
-		this.type = ID.replaceAll("[0-9]", "");
+		this.type = type;
+		position = new int[3];
+		position[0] = -1;	//オブジェクトのx座標	マップ上に存在しない場合は-1を代入
+		position[1] = -1;	//オブジェクトのy座標
+		position[2] = -1;	//アイテムスタック番号
 	}
 
 	public String getName() {
@@ -26,21 +24,23 @@ public abstract class Obj {
 		this.name = name;
 	}
 
-	public String getID() {
-		return this.ID;
-	}
-
 	public String getType() {
 		return this.type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setPosition(int x, int y) {
+		this.position[0] = x;
+		this.position[1] = y;
+	}
+
+	public int[] getPosition() {
+		return this.position;
 	}
 
 	public Map getM() {
 		return m;
 	}
+
 
 //	public abstract boolean isNext(Map m, Object o);
 }

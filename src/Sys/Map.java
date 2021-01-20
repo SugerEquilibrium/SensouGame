@@ -79,68 +79,74 @@ public class Map {
 	}
 
 	//引数のIDに一致するキャラクターの座標を取得
-	public int[] getPosition(String ID) {
-		int position[] = new int[2];
-		for(int x = 0; x < this.Xsize; x++) {
-			for(int y = 0; y < this.Ysize; y++) {
-				if(this.cl[x][y].getID().equals(ID)) {
-					position[0] = x;
-					position[1] = y;
-				}
-				if(this.tl[x][y].getID().equals(ID)) {
-					position[0] = x;
-					position[1] = y;
-				}
-			}
-		}
-		return position;		//見つからなかった場合はnull配列を返す（要修正
-	}
+//	public int[] getPosition(String ID) {
+//		int position[] = new int[2];
+//		for(int x = 0; x < this.Xsize; x++) {
+//			for(int y = 0; y < this.Ysize; y++) {
+//				if(this.cl[x][y].getID().equals(ID)) {
+//					position[0] = x;
+//					position[1] = y;
+//				}
+//				if(this.tl[x][y].getID().equals(ID)) {
+//					position[0] = x;
+//					position[1] = y;
+//				}
+//			}
+//		}
+//		return position;		//見つからなかった場合はnull配列を返す（要修正
+//	}
 
 	//引数の座標にキャラクターをセット
 	public void setCharacter(int x, int y, Character c) {
 		this.cl[x][y] = c;
+		c.setPosition(x, y);
 	}
 
 	//アイテムを一番上にセット
 	public void setItem(int x, int y, Item i) {
 		this.il[x][y][Util.countObjArr(this.il[x][y])] = i;
+		i.setPosition(x, y, Util.countObjArr(this.il[x][y]));
 	}
 
 	//引数の座標にトラップをセット
 	public void setTrap(int x, int y, Trap t) {
 		this.tl[x][y] = t;
+		t.setPosition(x, y);
 	}
 
 	//引数の座標に地形オブジェクトをセット
 	public void setLand(int x, int y, Land l) {
 		this.ll[x][y] = l;
+		l.setPosition(x, y);
 	}
 
 	//引数の座標のキャラクターを消去
 	public void removeCharacter(int x, int y) {
+		this.cl[x][y].setPosition(-1, -1);
 		this.cl[x][y] = new Character(this);
 	}
 
-	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し、削除、上詰め
-	public void removeItem(int x, int y, String ID) {
-		Util.removeItemById(this.il[x][y], ID);
+	//指定した座標のスタックアイテム配列から引数のアイテムタイプ識別子を検索し、削除、上詰め
+	public void removeItem(int x, int y, String type) {
+		Item i = Util.findItemById(this, this.il[x][y], type);
+		i.setPosition(-1, -1, -1);
+		for(int stack = i.getPosition()[2]; stack < Util.countObjArr(this.il[x][y]); stack++) {
+			this.il[x][y][stack] = this.il[x][y][stack + 1];
+		}
 	}
 
 	//引数の座標のトラップを削除
 	public void removeTrap(int x, int y) {
+		this.tl[x][y].setPosition(-1, -1);
 		this.tl[x][y] = new Trap(this);
 	}
 
 	//引数の座標の地形オブジェクトを削除
 	public void removeLand(int x, int y) {
+		this.ll[x][y].setPosition(-1, -1);
 		this.ll[x][y] = new Land(this);
 	}
 
-	//座標(x -> X, y -> Y)にキャラクターを移動
-	public void moveCharacter(int x, int y, int X, int Y) {
-		setCharacter(X, Y, this.cl[x][y]);
-		removeCharacter(x, y);
-	}
 
 	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
@@ -170,17 +176,17 @@ public class Map {
 		boolean isOverLap = false;
 		switch (c){
 		case 'c':
-			if(!cl[x][y].getID().equals("c0")) {
+			if(!cl[x][y].getType().equals("")) {
 				isOverLap = true;
 			}
 			break;
 		case 'i':
-			if(!cl[x][y].getID().equals("i0")) {
+			if(!cl[x][y].getType().equals("")) {
 				isOverLap = true;
 			}
 			break;
 		case 't':
-			if(!tl[x][y].getID().equals("t0")) {
+			if(!tl[x][y].getType().equals("")) {
 				isOverLap = true;
 			}
 			break;
@@ -304,14 +310,14 @@ public class Map {
 		for(int x = 0; x < Xsize; x++) {
 			for(int y = 0; y < Ysize; y++) {
 				if(this.cl[x][y].getTeam() == 0) {
-					displayNameC[x][y] = "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName();
+					displayNameC[x][y] = "[" + this.cl[x][y].getType() + "] " + this.cl[x][y].getName();
 				}else {
-					displayNameC[x][y] =  "[" + this.cl[x][y].getID() + "] " + this.cl[x][y].getName() + " (" + this.cl[x][y].getTeam() + ")";
+					displayNameC[x][y] =  "[" + this.cl[x][y].getType() + "] " + this.cl[x][y].getName() + " (" + this.cl[x][y].getTeam() + ")";
 				}
-				displayNameT[x][y] = "[" + this.tl[x][y].getID() + "] " + this.tl[x][y].getName();
-				displayNameL[x][y] = "[" + this.ll[x][y].getID() + "] " + this.ll[x][y].getName();
+				displayNameT[x][y] = "[" + this.tl[x][y].getType() + "] " + this.tl[x][y].getName();
+				displayNameL[x][y] = "[" + this.ll[x][y].getType() + "] " + this.ll[x][y].getName();
 				for(int stack = 0; stack < 100; stack++) {
-					displayNameI[x][y][stack] = "[" + this.il[x][y][stack].getID() + "] " + this.il[x][y][stack].getName();
+					displayNameI[x][y][stack] = "[" + this.il[x][y][stack].getType() + "] " + this.il[x][y][stack].getName();
 				}
 			}
 		}

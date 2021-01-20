@@ -77,7 +77,7 @@ public class GameCtrl {
 		int selection = new java.util.Scanner(System.in).nextInt();
 
 		//アクションの内容はキャラクタークラスにあるべき
-		System.out.print("方向を指定してください");
+		System.out.print("方向を指定してください\n");
 		//隣接するキャラクターを取得
 		Character nextChar[] = p.getParty()[partyNum].getNextCharacter();
 		for(int i = 0; i < nextChar.length; i++) {

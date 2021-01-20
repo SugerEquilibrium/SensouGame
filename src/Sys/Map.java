@@ -68,11 +68,11 @@ public class Map {
 		Land le = new Land(this);
 		for(int x1 = 0; x1 < this.Xsize; x1++) {
 			for(int y1 = 0; y1 < this.Ysize; y1++) {
-				cl[x1][y1] = ce;
-				tl[x1][y1] = te;
-				ll[x1][y1] = le;
+				this.setCharacter(x1, y1);
+				this.setTrap(x1, y1);
+				this.setLand(x1, y1);
 				for(int stack = 0; stack < this.il[x1][y1].length; stack++) {
-					this.il[x1][y1][stack] = ie;
+					this.setItem(x1, y1, stack);
 				}
 			}
 		}
@@ -101,15 +101,33 @@ public class Map {
 		this.cl[x][y] = c;
 		c.setPosition(x, y);
 	}
+	//引数の座標に空キャラクターをセット
+	public void setCharacter(int x, int y) {
+		Character c = new Character(this);
+		this.cl[x][y] = c;
+		c.setPosition(x, y);
+	}
 
 	//アイテムを一番上にセット
 	public void setItem(int x, int y, Item i) {
 		this.il[x][y][Util.countObjArr(this.il[x][y])] = i;
 		i.setPosition(x, y, Util.countObjArr(this.il[x][y]));
 	}
+	//引数の座標、スタック番号に空アイテムをセット
+	public void setItem(int x, int y, int stack) {
+		Item i = new Item(this);
+		this.il[x][y][stack] = i;
+		i.setPosition(x, y, stack);
+	}
 
 	//引数の座標にトラップをセット
 	public void setTrap(int x, int y, Trap t) {
+		this.tl[x][y] = t;
+		t.setPosition(x, y);
+	}
+	//引数の座標に空トラップをセット
+	public void setTrap(int x, int y) {
+		Trap t = new Trap(this);
 		this.tl[x][y] = t;
 		t.setPosition(x, y);
 	}
@@ -119,14 +137,20 @@ public class Map {
 		this.ll[x][y] = l;
 		l.setPosition(x, y);
 	}
+	//引数の座標に空地形オブジェクトをセット
+	public void setLand(int x, int y) {
+		Land l = new Land(this);
+		this.ll[x][y] = l;
+		l.setPosition(x, y);
+	}
 
 	//引数の座標のキャラクターを消去
 	public void removeCharacter(int x, int y) {
-		this.cl[x][y].setPosition(-1, -1);
-		this.cl[x][y] = new Character(this);
+		this.cl[x][y].setPosition(-1, -1);	//マップ上に存在しないオブジェクトの座標は(-1, -1)とする
+		this.setCharacter(x, y);
 	}
 
-	//指定した座標のスタックアイテム配列から引数のアイテムタイプ識別子を検索し、削除、上詰め
+	//指定した座標のスタックアイテム配列から引数のアイテムタイプ識別子を検索し、一つだけ削除、上詰め
 	public void removeItem(int x, int y, String type) {
 		Item i = Util.findItemById(this, this.il[x][y], type);
 		i.setPosition(-1, -1, -1);
@@ -138,17 +162,16 @@ public class Map {
 	//引数の座標のトラップを削除
 	public void removeTrap(int x, int y) {
 		this.tl[x][y].setPosition(-1, -1);
-		this.tl[x][y] = new Trap(this);
+		this.setTrap(x, y);
 	}
 
 	//引数の座標の地形オブジェクトを削除
 	public void removeLand(int x, int y) {
 		this.ll[x][y].setPosition(-1, -1);
-		this.ll[x][y] = new Land(this);
+		this.setLand(x, y);
 	}
 
-
-	//指定した座標のスタックアイテム配列から引数のアイテムIDを検索し移動、移動元は削除、上詰め
+	//指定した座標のスタックアイテム配列から引数のアイテムタイプ識別子を検索し移動、移動元は削除、上詰め
 	//座標を(x -> X, y -> Y)に移動
 	public void moveItem(int x, int y, String ID, int X, int Y) {
 		setItem(X, Y, Util.findItemById(this, this.il[x][y], ID));

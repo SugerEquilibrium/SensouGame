@@ -28,6 +28,7 @@ public class Character extends Obj {
 		super(m, "", "");
 		this.HP = 0;
 		this.team = 0;
+		this.isDead = true;
 		this.item = new Item[3];
 		for(int i = 0; i < this.item.length; i++) {
 			this.item[i] = new Item(m);
@@ -171,25 +172,32 @@ public class Character extends Obj {
 		try {
 			int x = this.getPosition()[0];
 			int y = this.getPosition()[1];
-			if(this.getM().isOutSide(x, y)) {
+			int X = x + Util.directionVector(direction)[0];
+			int Y = y + Util.directionVector(direction)[1];
+			if(this.getM().isOutSide(X, Y)) {
 				throw new OutsideExc("マップの範囲外を指定しています");
 			}
-			this.getM().getCharacterLayer()[x][y].damage(1);
+			this.getM().getCharacterLayer()[X][Y].damage(1);
 		}catch(OutsideExc e) {
 			;
 		}
 	}
 
 	//死亡処理
+	//空キャラクターの場合は処理をスキップ
 	public void die() {
-		int x = this.getPosition()[0];
-		int y = this.getPosition()[1];
-		this.isDead = true;
-		for(int i = 0; i < this.item.length; i++) {
-			this.getM().setItem(x, y, this.item[i]);
-			this.item[i] = new Item(this.getM());
-		}
-		this.getM().getCharacterLayer()[x][y] = new Character(this.getM());
+//		if(this.getType().equals("")) {
+//			;
+//		}else {
+			int x = this.getPosition()[0];
+			int y = this.getPosition()[1];
+			this.isDead = true;
+			for(int i = 0; i < Util.countObjArr(this.item); i++) {
+				this.getM().setItem(x, y, this.item[i]);
+				this.item[i] = new Item(this.getM());
+			}
+			this.getM().getCharacterLayer()[x][y] = new Character(this.getM());
+//		}
 	}
 
 	//ユーザの選択を引数で受け取り、それに対応した行動を実行する

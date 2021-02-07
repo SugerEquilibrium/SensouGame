@@ -12,6 +12,7 @@ public class Character extends Obj {
 	private Item item[];
 	private char team;
 	private boolean isDead;
+	private int deathCount;
 
 	public Character(Map m, String type, String name, char team) {
 		super(m, type, name);
@@ -188,6 +189,7 @@ public class Character extends Obj {
 
 	//死亡処理
 	//空キャラクターの場合は処理をスキップ
+	//死んだプレイヤーの座標フィールドを(-1, -1)にする
 	public void die() {
 		if(this.getType().equals("")) {
 			;
@@ -199,6 +201,7 @@ public class Character extends Obj {
 				this.getM().setItem(x, y, this.item[i]);
 				this.item[i] = new Item(this.getM());
 			}
+			this.getM().getCharacterLayer()[x][y].setPosition(-1, -1);
 			this.getM().getCharacterLayer()[x][y] = new Character(this.getM());
 		}
 	}

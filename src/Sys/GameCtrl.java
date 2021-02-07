@@ -43,8 +43,10 @@ public class GameCtrl {
 		for(int i = 0; i < 3; i++) {
 			//プレイヤーのループ
 			for(int j = 0; j < p.length; j++) {
-				playerAction(m, p[j], i);
-				updateAllWindow(m, p);
+				if(!p[j].getParty()[i].isDead()) {
+					playerAction(m, p[j], i);
+					updateAllWindow(m, p);
+				}
 			}
 		}
 	}
